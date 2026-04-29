@@ -1,0 +1,10 @@
+{
+  "name": "sakimu-nav-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A deployable static navigation site for sakimu.com",
+  "scripts": {
+    "dev": "python3 -m http.server 4173",
+    "start": "python3 -m http.server 4173"
+  }
+}

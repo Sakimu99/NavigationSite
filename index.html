@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sakimu 导航站</title>
+    <meta
+      name="description"
+      content="Sakimu 的个人导航站，聚合主站、博客、工具页与投喂页入口。"
+    />
+    <meta name="theme-color" content="#f7f7f5" />
+    <meta property="og:title" content="Sakimu 导航站" />
+    <meta
+      property="og:description"
+      content="一个可直接部署的个人导航站，聚合博客、工具与赞助入口。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sakimu.com/" />
+    <link rel="canonical" href="https://sakimu.com/" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./site.config.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body data-page="home">
+    <div class="page-shell">
+      <header class="site-header container">
+        <a class="brand" href="./index.html">Sakimu</a>
+        <nav class="site-nav">
+          <a href="./index.html" class="is-active">首页</a>
+          <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer">博客</a>
+          <a href="./tools.html">工具</a>
+          <a href="./donate.html">投喂</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero container hero--simple">
+          <div class="hero-copy panel panel--hero">
+            <span class="eyebrow">主页</span>
+            <h1 id="hero-title">Sakimu 导航站</h1>
+            <p id="hero-subtitle" class="lead">
+              一个简单的入口页，用来放博客、工具和其他常用链接。
+            </p>
+            <div class="hero-actions">
+              <a class="button button--primary" href="https://blog.sakimu.com" target="_blank" rel="noreferrer">前往博客</a>
+              <a class="button button--ghost" href="./tools.html">查看工具</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="container section-block section-block--compact">
+          <div class="section-heading section-heading--stacked">
+            <div>
+              <span class="eyebrow">入口</span>
+              <h2>常用页面</h2>
+            </div>
+            <p>把最常访问的内容放在这里，其余页面继续保持独立。</p>
+          </div>
+          <div id="quick-links" class="card-grid card-grid--simple"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer container">
+        <p>© <span data-year></span> Sakimu.</p>
+      </footer>
+    </div>
+  </body>
+</html>

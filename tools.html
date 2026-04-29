@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>工具页 | Sakimu</title>
+    <meta
+      name="description"
+      content="Sakimu 的工具页，用于集中展示常用在线工具、服务入口与实验项目。"
+    />
+    <meta name="theme-color" content="#f7f7f5" />
+    <meta property="og:title" content="Sakimu 工具页" />
+    <meta
+      property="og:description"
+      content="集中整理工具入口、效率服务和实验功能。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sakimu.com/tools.html" />
+    <link rel="canonical" href="https://sakimu.com/tools.html" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./site.config.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body data-page="tools">
+    <div class="page-shell">
+      <header class="site-header container">
+        <a class="brand" href="./index.html">Sakimu</a>
+        <nav class="site-nav">
+          <a href="./index.html">首页</a>
+          <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer">博客</a>
+          <a href="./tools.html" class="is-active">工具</a>
+          <a href="./donate.html">投喂</a>
+        </nav>
+      </header>
+
+      <main class="container page-main">
+        <section class="page-banner panel">
+          <span class="eyebrow">工具</span>
+          <h1>工具页</h1>
+          <p>
+            这里可以放常用工具、实验页面，或者你平时会打开的一些在线服务。
+          </p>
+        </section>
+
+        <section>
+          <div id="tools-grid" class="card-grid"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer container">
+        <p>© <span data-year></span> Sakimu.</p>
+      </footer>
+    </div>
+  </body>
+</html>
