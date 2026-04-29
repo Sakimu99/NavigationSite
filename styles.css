@@ -42,6 +42,8 @@ a {
 }
 
 .page-shell {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
@@ -109,6 +111,10 @@ a {
 
 .hero--simple {
   padding-top: 12px;
+}
+
+.page-main--home .hero {
+  padding-bottom: 10px;
 }
 
 .hero-copy {
@@ -207,6 +213,7 @@ p {
 
 .section-block,
 .page-main {
+  flex: 1;
   padding: 20px 0 56px;
 }
 
@@ -228,6 +235,29 @@ p {
   gap: 8px;
 }
 
+.section-heading--plain {
+  gap: 4px;
+}
+
+.section-heading--plain h2 {
+  margin-bottom: 2px;
+}
+
+.page-main--home {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.page-main--home .hero-copy {
+  width: 100%;
+  max-width: none;
+}
+
+.tools-grid-section {
+  margin-top: 28px;
+}
+
 .section-link,
 .text-link {
   width: fit-content;
@@ -247,6 +277,28 @@ p {
   flex-direction: column;
   gap: 12px;
   padding: 20px;
+}
+
+.card-cta {
+  margin-top: auto;
+  min-height: 38px;
+  padding: 0 14px;
+  border-color: var(--panel-border);
+  background: #ffffff;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.card-cta:hover {
+  background: var(--accent-soft);
+  border-color: #d6d3d1;
+  color: var(--text);
+}
+
+.card-cta:focus-visible {
+  outline: 2px solid rgba(41, 37, 36, 0.18);
+  outline-offset: 2px;
 }
 
 .card-top {

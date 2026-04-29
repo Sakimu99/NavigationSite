@@ -7,7 +7,7 @@ const setText = (selector, value) => {
   }
 };
 
-const createCard = ({ title, description, url, badge, actionLabel }) => {
+const createCard = ({ title, description, url, badge, actionLabel, actionClass = 'text-link' }) => {
   const article = document.createElement('article');
   article.className = 'panel card';
 
@@ -23,7 +23,7 @@ const createCard = ({ title, description, url, badge, actionLabel }) => {
     </div>
     <p>${description || ''}</p>
     <a
-      class="text-link"
+      class="${actionClass}"
       href="${safeUrl}"
       ${isExternal ? 'target="_blank" rel="noreferrer"' : ''}
     >${actionText}</a>
@@ -40,10 +40,17 @@ const renderList = (selector, items, options = {}) => {
 
   const limit = options.limit || items.length;
   const actionLabel = options.actionLabel;
+  const actionClass = options.actionClass;
   const fragment = document.createDocumentFragment();
 
   items.slice(0, limit).forEach((item) => {
-    fragment.appendChild(createCard({ ...item, actionLabel: item.actionLabel || actionLabel }));
+    fragment.appendChild(
+      createCard({
+        ...item,
+        actionLabel: item.actionLabel || actionLabel,
+        actionClass: item.actionClass || actionClass || 'text-link'
+      })
+    );
   });
 
   container.innerHTML = '';
@@ -61,11 +68,17 @@ const initCommon = () => {
 };
 
 const initHome = () => {
-  renderList('#quick-links', config.quickLinks, { actionLabel: '进入入口' });
+  renderList('#quick-links', config.quickLinks, {
+    actionLabel: '进入入口',
+    actionClass: 'text-link card-cta button button--ghost'
+  });
 };
 
 const initTools = () => {
-  renderList('#tools-grid', config.tools, { actionLabel: '查看工具' });
+  renderList('#tools-grid', config.tools, {
+    actionLabel: '查看工具',
+    actionClass: 'text-link card-cta button button--ghost'
+  });
 };
 
 const page = document.body.dataset.page;
