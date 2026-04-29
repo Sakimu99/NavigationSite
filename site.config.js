@@ -12,13 +12,13 @@ window.SITE_CONFIG = {
     {
       title: '工具页',
       description: '放常用工具和实验页面。',
-      url: './tools.html',
+      url: '/tools',
       badge: '工具'
     },
     {
       title: '投喂页',
       description: '放赞助方式和支持说明。',
-      url: './donate.html',
+      url: '/donate',
       badge: '支持'
     }
   ],

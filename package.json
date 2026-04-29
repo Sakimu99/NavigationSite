@@ -4,7 +4,7 @@
   "private": true,
   "description": "A deployable static navigation site for sakimu.com",
   "scripts": {
-    "dev": "python3 -m http.server 4173",
-    "start": "python3 -m http.server 4173"
+    "dev": "npx wrangler pages dev .",
+    "start": "npx wrangler pages dev ."
   }
 }
