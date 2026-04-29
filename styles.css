@@ -376,11 +376,31 @@ p {
 }
 
 .site-footer {
-  padding: 0 0 28px;
+  padding: 10px 0 28px;
 }
 
-.site-footer p {
-  font-size: 0.92rem;
+.site-footer__meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--subtle);
+  font-size: 0.88rem;
+}
+
+.site-footer__meta a {
+  color: inherit;
+}
+
+.site-footer__meta a:hover {
+  color: var(--muted);
+}
+
+.site-footer__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: #d6d3d1;
 }
 
 .page-main--center {
@@ -512,5 +532,14 @@ p {
 
   .donate-card__image {
     max-width: none;
+  }
+
+  .site-footer__meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .site-footer__dot {
+    display: none;
   }
 }
