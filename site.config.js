@@ -50,25 +50,11 @@ window.SITE_CONFIG = {
   ],
   donations: [
     {
-      title: '微信赞赏',
-      description: '把你的微信收款码图片或跳转链接替换到这里。',
-      actionLabel: '替换二维码',
-      url: '#',
-      badge: '推荐'
-    },
-    {
       title: '支付宝',
-      description: '用于展示支付宝二维码、短链或赞助说明。',
-      actionLabel: '替换二维码',
-      url: '#',
-      badge: '常用'
-    },
-    {
-      title: 'PayPal / 爱发电',
-      description: '如果你有国际支付或会员赞助平台，也可以接在这里。',
-      actionLabel: '替换链接',
-      url: '#',
-      badge: '可选'
+      description: '用于展示支付宝收款码和支持说明。',
+      actionLabel: '查看收款码',
+      url: '/donate#alipay',
+      badge: '唯一方式'
     }
   ]
 };

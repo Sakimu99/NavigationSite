@@ -68,10 +68,6 @@ const initTools = () => {
   renderList('#tools-grid', config.tools, { actionLabel: '查看工具' });
 };
 
-const initDonate = () => {
-  renderList('#donate-grid', config.donations, { actionLabel: '打开入口' });
-};
-
 const page = document.body.dataset.page;
 
 initCommon();
@@ -82,8 +78,4 @@ if (page === 'home') {
 
 if (page === 'tools') {
   initTools();
-}
-
-if (page === 'donate') {
-  initDonate();
 }
