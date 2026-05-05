@@ -46,7 +46,7 @@ NavigationSite/
 │  └─ index.html             # 工具页
 ├─ donate/
 │  ├─ index.html             # 投喂页
-│  └─ zhifubao-donate.jpg    # 支付宝收款码图片
+│  └─ zhifubao-donate.png    # 支付宝收款码图片
 ├─ .gitignore                # Git 忽略规则
 ├─ .wrangler/                # Wrangler 本地开发缓存和临时文件
 ├─ .playwright-mcp/          # Playwright 调试产物
@@ -92,7 +92,7 @@ NavigationSite/
 - 承载投喂相关文案和图片资源
 
 配套图片文件：
-- `donate/zhifubao-donate.jpg`
+- `donate/zhifubao-donate.png`
 
 ---
 
