@@ -8,8 +8,14 @@
       name="description"
       content="Sakimu 的个人导航站，聚合主站、博客、工具页与投喂页入口。"
     />
-    <meta name="theme-color" content="#f7f7f5" />
-    <link rel="icon" href="https://q.qlogo.cn/headimg_dl?dst_uin=2811363539&spec=5" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content="Sakimu" />
     <meta property="og:title" content="Sakimu 导航站" />
     <meta
       property="og:description"
@@ -17,46 +23,96 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sakimu.com/" />
+    <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sakimu 导航站" />
+    <meta name="twitter:description" content="聚合博客、工具与赞助入口的个人导航站。" />
+    <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+
     <link rel="canonical" href="https://sakimu.com/" />
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="./site.config.js" defer></script>
-    <script src="./app.js" defer></script>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body data-page="home">
     <div class="page-shell">
-      <header class="site-header container">
-        <a class="brand" href="/">Sakimu</a>
-        <nav class="site-nav">
-          <a href="/" class="is-active">首页</a>
-          <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
-          <a href="/tools">工具</a>
-          <a href="/donate">投喂</a>
-        </nav>
-      </header>
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">Sakimu</a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/" class="is-active" aria-current="page">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
+            <a href="/tools/">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
 
       <main class="page-main page-main--home">
         <section class="hero container hero--simple">
           <div class="hero-copy panel panel--hero">
             <span class="eyebrow">主页</span>
-            <h1 id="hero-title">Sakimu 导航站</h1>
-            <p id="hero-subtitle" class="lead">
+            <h1>Sakimu 导航站</h1>
+            <p class="lead">
               一个简单的入口页，用来放博客、工具和其他常用链接。
             </p>
             <div class="hero-actions">
               <a class="button button--primary" href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">前往博客</a>
-              <a class="button button--ghost" href="/tools">查看工具</a>
+              <a class="button button--ghost" href="/tools/">查看工具</a>
             </div>
           </div>
         </section>
 
         <section class="container section-block section-block--compact">
-          <div id="quick-links" class="card-grid card-grid--simple"></div>
+          <div class="card-grid card-grid--simple">
+            <article class="panel card">
+              <div class="card-top">
+                <span class="badge">内容</span>
+                <h3>博客</h3>
+              </div>
+              <p>记录文章和日常更新。</p>
+              <a
+                class="text-link card-cta button button--ghost"
+                href="https://blog.sakimu.com"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="进入博客"
+              >进入入口</a>
+            </article>
+
+            <article class="panel card">
+              <div class="card-top">
+                <span class="badge">工具</span>
+                <h3>工具页</h3>
+              </div>
+              <p>放常用工具和实验页面。</p>
+              <a
+                class="text-link card-cta button button--ghost"
+                href="/tools/"
+                aria-label="进入工具页"
+              >进入入口</a>
+            </article>
+
+            <article class="panel card">
+              <div class="card-top">
+                <span class="badge">支持</span>
+                <h3>投喂页</h3>
+              </div>
+              <p>放赞助方式和支持说明。</p>
+              <a
+                class="text-link card-cta button button--ghost"
+                href="/donate/"
+                aria-label="进入投喂页"
+              >进入入口</a>
+            </article>
+          </div>
         </section>
       </main>
 
       <footer class="site-footer container">
         <p class="site-footer__meta">
-          <span>© <span data-year></span> Sakimu.</span>
+          <span>© <span data-year>2026</span> Sakimu.</span>
           <span class="site-footer__dot" aria-hidden="true"></span>
           <a
             href="https://beian.miit.gov.cn/"
@@ -66,5 +122,11 @@
         </p>
       </footer>
     </div>
+
+    <script>
+      document.querySelectorAll('[data-year]').forEach((n) => {
+        n.textContent = String(new Date().getFullYear());
+      });
+    </script>
   </body>
 </html>

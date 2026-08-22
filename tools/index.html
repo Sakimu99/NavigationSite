@@ -8,31 +8,46 @@
       name="description"
       content="Sakimu 的工具页，用于集中展示常用在线工具、服务入口与实验项目。"
     />
-    <meta name="theme-color" content="#f7f7f5" />
-    <link rel="icon" href="https://q.qlogo.cn/headimg_dl?dst_uin=2811363539&spec=5" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content="Sakimu" />
     <meta property="og:title" content="Sakimu 工具页" />
     <meta
       property="og:description"
       content="集中整理工具入口、效率服务和实验功能。"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://sakimu.com/tools" />
-    <link rel="canonical" href="https://sakimu.com/tools" />
-    <link rel="stylesheet" href="../styles.css" />
-    <script src="../site.config.js" defer></script>
-    <script src="../app.js" defer></script>
+    <meta property="og:url" content="https://sakimu.com/tools/" />
+    <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sakimu 工具页" />
+    <meta name="twitter:description" content="集中整理工具入口、效率服务和实验功能。" />
+    <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+
+    <link rel="canonical" href="https://sakimu.com/tools/" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body data-page="tools">
     <div class="page-shell">
-      <header class="site-header container">
-        <a class="brand" href="/">Sakimu</a>
-        <nav class="site-nav">
-          <a href="/">首页</a>
-          <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
-          <a href="/tools" class="is-active">工具</a>
-          <a href="/donate">投喂</a>
-        </nav>
-      </header>
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">Sakimu</a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
+            <a href="/tools/" class="is-active" aria-current="page">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
 
       <main class="container page-main">
         <section class="page-banner panel">
@@ -44,13 +59,49 @@
         </section>
 
         <section class="tools-grid-section">
-          <div id="tools-grid" class="card-grid"></div>
+          <div class="card-grid">
+            <article class="panel card card--disabled">
+              <div class="card-top">
+                <span class="badge">待接入</span>
+                <h3>JSON 格式化</h3>
+              </div>
+              <p>示例工具位。你可以替换成自己的在线工具地址。</p>
+              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
+            </article>
+
+            <article class="panel card card--disabled">
+              <div class="card-top">
+                <span class="badge">待接入</span>
+                <h3>正则测试</h3>
+              </div>
+              <p>适合放常用开发工具、在线测试页面或实验功能。</p>
+              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
+            </article>
+
+            <article class="panel card card--disabled">
+              <div class="card-top">
+                <span class="badge">待接入</span>
+                <h3>编码转换</h3>
+              </div>
+              <p>可以替换为 Base64、URL Encode 或文本处理工具。</p>
+              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
+            </article>
+
+            <article class="panel card card--disabled">
+              <div class="card-top">
+                <span class="badge">可扩展</span>
+                <h3>站点状态</h3>
+              </div>
+              <p>也可以放监控面板、服务状态页或公开仪表盘入口。</p>
+              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
+            </article>
+          </div>
         </section>
       </main>
 
       <footer class="site-footer container">
         <p class="site-footer__meta">
-          <span>© <span data-year></span> Sakimu.</span>
+          <span>© <span data-year>2026</span> Sakimu.</span>
           <span class="site-footer__dot" aria-hidden="true"></span>
           <a
             href="https://beian.miit.gov.cn/"
@@ -60,5 +111,11 @@
         </p>
       </footer>
     </div>
+
+    <script>
+      document.querySelectorAll('[data-year]').forEach((n) => {
+        n.textContent = String(new Date().getFullYear());
+      });
+    </script>
   </body>
 </html>

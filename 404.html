@@ -4,9 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>页面未找到 | Sakimu</title>
-    <meta name="theme-color" content="#f7f7f5" />
-    <link rel="icon" href="https://q.qlogo.cn/headimg_dl?dst_uin=2811363539&spec=5" />
-    <link rel="stylesheet" href="./styles.css" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body data-page="404">
     <div class="page-shell">
@@ -21,7 +27,7 @@
 
       <footer class="site-footer container">
         <p class="site-footer__meta">
-          <span>© <span data-year></span> Sakimu.</span>
+          <span>© <span data-year>2026</span> Sakimu.</span>
           <span class="site-footer__dot" aria-hidden="true"></span>
           <a
             href="https://beian.miit.gov.cn/"
@@ -31,5 +37,11 @@
         </p>
       </footer>
     </div>
+
+    <script>
+      document.querySelectorAll('[data-year]').forEach((n) => {
+        n.textContent = String(new Date().getFullYear());
+      });
+    </script>
   </body>
 </html>

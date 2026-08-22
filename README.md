@@ -2,437 +2,197 @@
 
 ## 1. 项目简介
 
-这是一个基于 **原生 HTML + CSS + JavaScript** 搭建的静态导航站项目，主要用于展示：
+这是一个基于 **原生 HTML + CSS** 搭建的静态导航站项目，主要用于展示：
 
 - 首页导航入口
 - 工具页工具列表
 - 投喂页内容
 - 404 页面
 
-项目没有使用前端框架，页面内容主要通过配置文件驱动，适合快速维护和直接部署。
+项目没有使用前端框架，**页面内容全部写死在 HTML 里**，不依赖运行时 JavaScript 渲染。
+这样做的好处是：首屏内容随 HTML 一起到达，JS 被拦截也能正常显示，搜索引擎也能直接抓到内容。
 
-当前本地开发命令来自 `package.json`：
-
-```bash
-npm run dev
-```
-
-该命令实际使用的是：
+本地开发命令：
 
 ```bash
-npx wrangler pages dev .
+npm run dev        # 实际执行 npx wrangler pages dev .
 ```
 
-说明当前项目适合部署到 **Cloudflare Pages** 一类的静态托管环境。
+项目面向 **Cloudflare Pages** 一类的静态托管环境。
 
 ---
 
 ## 2. 项目核心文件结构
 
-下面是和业务最相关的结构：
-
 ```text
 NavigationSite/
-├─ index.html                # 首页
-├─ 404.html                  # 404 页面
-├─ styles.css                # 全站公共样式
-├─ app.js                    # 全站前端渲染逻辑
-├─ site.config.js            # 全站数据配置（首页入口、工具列表、投喂配置）
-├─ package.json              # 本地开发脚本
-├─ _headers                  # 静态站点响应头配置
-├─ robots.txt                # 搜索引擎抓取规则
-├─ sitemap.xml               # 站点地图
+├─ index.html                 # 首页（含首页入口卡片）
+├─ 404.html                   # 404 页面
+├─ styles.css                 # 全站公共样式（含亮色 / 暗色主题变量）
+├─ manifest.webmanifest       # PWA 清单
+├─ favicon.ico                # 站点图标（16/32/48 多尺寸）
+├─ apple-touch-icon.png       # iOS 添加到主屏图标 180×180
+├─ icon-192.png               # PWA 图标 192×192
+├─ icon-512.png               # PWA 图标 512×512
+├─ og-image.jpg               # 社交分享缩略图 1200×630
+├─ package.json               # 本地开发脚本
+├─ _headers                   # 缓存策略 + 安全响应头
+├─ robots.txt                 # 搜索引擎抓取规则
+├─ sitemap.xml                # 站点地图
 ├─ tools/
-│  └─ index.html             # 工具页
+│  └─ index.html              # 工具页（含工具卡片）
 ├─ donate/
-│  ├─ index.html             # 投喂页
-│  └─ zhifubao-donate.png    # 支付宝收款码图片
-├─ .gitignore                # Git 忽略规则
-├─ .wrangler/                # Wrangler 本地开发缓存和临时文件
-├─ .playwright-mcp/          # Playwright 调试产物
-├─ .spec-workflow/           # 规格/模板相关辅助文件
-└─ .git/                     # Git 仓库内部目录
+│  ├─ index.html              # 投喂页
+│  ├─ zhifubao-donate.webp    # 收款码海报 820w（WebP，主用）
+│  ├─ zhifubao-donate-560.webp# 收款码海报 560w（WebP，主用）
+│  ├─ zhifubao-donate.jpg     # 收款码海报 820w（JPEG 降级）
+│  └─ zhifubao-donate-560.jpg # 收款码海报 560w（JPEG 降级）
+└─ .gitignore
 ```
 
 ---
 
 ## 3. 各核心文件作用说明
 
-### 3.1 `index.html`
-首页文件。
+### 3.1 `index.html` / `tools/index.html` / `donate/index.html` / `404.html`
+四个页面文件，各自负责：
 
-主要负责：
-- 渲染导航站主页结构
-- 展示首页主卡片（hero）
-- 提供首页入口卡片挂载点 `#quick-links`
-- 加载全站样式和脚本
+- 页面完整结构与**全部可见内容**
+- SEO 元信息（description / canonical / Open Graph / Twitter Card）
+- 图标与 PWA 清单引用
+- 页脚年份的内联脚本（页面底部 3 行，不产生额外请求）
 
-首页的入口卡片不是写死在 HTML 里的，而是通过 `app.js` 读取 `site.config.js` 后动态渲染出来。
+四个页面共用 `styles.css`，没有其他外部依赖。
 
----
+### 3.2 `styles.css`
+全站唯一样式文件，负责：
 
-### 3.2 `tools/index.html`
-工具页文件。
+- **颜色变量**：`:root` 定义亮色主题，`@media (prefers-color-scheme: dark)` 定义暗色主题
+- 导航栏、卡片、按钮、投喂页、页脚的全部视觉表现
+- 响应式断点：960px（卡片列数）、720px（导航栏换行）、640px（移动端）
+- 无障碍：全局 `:focus-visible` 焦点环、`prefers-reduced-motion` 降级
 
-主要负责：
-- 展示工具页标题区
-- 提供工具卡片挂载点 `#tools-grid`
-- 加载全站样式和脚本
+> **重要约定**：所有颜色都必须走 CSS 变量，不要在变量区之外写死 `#xxxxxx`。
+> 否则暗色模式下会出现白块。
 
-真正的工具卡片数据来自 `site.config.js` 里的 `tools` 数组。
+### 3.3 `_headers`
+Cloudflare Pages 响应头配置，分两部分：
 
----
+- **缓存策略**：HTML 每次校验（改完立即生效）；CSS 缓存 1 天；图片 / 图标缓存 1 年
+- **安全响应头**：CSP、nosniff、X-Frame-Options、Referrer-Policy、Permissions-Policy
 
-### 3.3 `donate/index.html`
-投喂页文件。
+> CSS 没有内容哈希，所以只缓存 1 天，避免改样式后用户长期看到旧版。
 
-主要负责：
-- 展示投喂说明
-- 展示支付宝收款码
-- 承载投喂相关文案和图片资源
+### 3.4 `manifest.webmanifest`
+PWA 清单，让站点可以「添加到主屏幕」。改站点名 / 主题色时需要同步这里。
 
-配套图片文件：
-- `donate/zhifubao-donate.png`
-
----
-
-### 3.4 `404.html`
-站点的 404 页面。
-
-主要负责：
-- 在页面不存在时提示用户
-- 提供返回首页入口
+### 3.5 `robots.txt` / `sitemap.xml`
+搜索引擎抓取规则与站点地图。**新增页面时记得同步更新 `sitemap.xml`。**
 
 ---
 
-### 3.5 `styles.css`
-全站公共样式文件。
-
-主要负责：
-- 定义全站颜色变量、圆角、阴影、容器宽度
-- 控制导航栏、首页主卡片、工具卡片、投喂页、页脚等视觉表现
-- 定义按钮、标签、卡片、网格布局等通用样式
-
-如果你要调整：
-- 页面间距
-- 卡片样式
-- 按钮外观
-- 标题区视觉
-- 页脚位置
-
-通常都在这个文件里修改。
-
----
-
-### 3.6 `app.js`
-全站前端渲染逻辑文件。
-
-主要负责：
-- 读取 `site.config.js` 中的数据
-- 根据当前页面类型渲染不同卡片
-- 统一处理首页和工具页的卡片生成逻辑
-
-当前关键逻辑包括：
-
-- `createCard(...)`
-  - 负责生成单个卡片 DOM
-- `renderList(selector, items, options)`
-  - 负责把一组卡片渲染到指定容器
-- `initHome()`
-  - 初始化首页入口卡片
-- `initTools()`
-  - 初始化工具页工具卡片
-
-也就是说：
-- **HTML 提供容器**
-- **`site.config.js` 提供数据**
-- **`app.js` 负责渲染**
-
----
-
-### 3.7 `site.config.js`
-全站配置文件，也是最常用的维护入口。
-
-主要负责配置：
-- 站点标题
-- 副标题
-- 首页入口列表 `quickLinks`
-- 工具页工具列表 `tools`
-- 投喂相关配置 `donations`
-
-如果你只是想修改：
-- 首页入口内容
-- 工具页工具列表
-- 某个卡片标题、描述、跳转地址、标签
-
-大多数时候都只需要改这个文件。
-
----
-
-### 3.8 `package.json`
-项目脚本入口。
-
-当前用途比较简单：
-- 提供本地开发命令
-- 标记项目基本信息
-
----
-
-### 3.9 `_headers`
-静态站点响应头配置文件。
-
-通常用于：
-- 配置缓存策略
-- 控制静态资源响应头
-
-如果以后要细调浏览器缓存行为，可以看这个文件。
-
----
-
-### 3.10 `robots.txt`
-搜索引擎抓取规则文件。
-
-主要用于告诉爬虫：
-- 哪些页面允许抓取
-- 哪些页面不建议抓取
-
----
-
-### 3.11 `sitemap.xml`
-站点地图文件。
-
-主要用于：
-- 帮助搜索引擎理解站点页面结构
-- 提高页面发现效率
-
----
-
-## 4. 页面内容是如何组织的
-
-这个项目的核心组织方式可以理解为：
-
-### 4.1 结构层：HTML
-每个页面文件负责：
-- 页面基础结构
-- 容器节点
-- SEO 元信息
-- 样式和脚本引用
-
-### 4.2 数据层：`site.config.js`
-负责存放：
-- 首页入口数据
-- 工具页卡片数据
-- 投喂配置数据
-
-### 4.3 渲染层：`app.js`
-负责：
-- 从配置中取数据
-- 生成卡片
-- 根据页面类型挂载到对应位置
-
-### 4.4 表现层：`styles.css`
-负责：
-- 所有视觉和布局表现
-
-这种结构的优点是：
-- 简单直接
-- 没有框架负担
-- 改数据不需要改复杂逻辑
-- 很适合做个人导航站和轻量工具聚合页
-
----
-
-## 5. 如果想在工具页面新增一个工具，要改哪些地方
-
-这是最常见的维护需求。
-
-### 5.1 最常见情况：只新增一个工具入口
-如果你只是想让工具页多一个工具卡片，通常只需要改：
-
-- `site.config.js`
-
-具体来说，是修改其中的：
-
-- `tools` 数组
-
-例如新增一项：
-
-```js
-{
-  title: '图片压缩',
-  description: '用于压缩 PNG / JPG，适合放常用在线小工具。',
-  url: '/tools/image-compress',
-  badge: '新工具'
-}
-```
-
-字段说明：
-
-- `title`：工具名称
-- `description`：工具说明
-- `url`：点击按钮后的跳转地址
-- `badge`：卡片左上角标签
-
-改完后，工具页会自动渲染，不需要额外修改 `tools/index.html`。
-
----
-
-### 5.2 如果这个工具是外部网站
-如果你新增的是一个外部工具，只需要把 `url` 写成外链：
-
-```js
-{
-  title: '在线图片压缩',
-  description: '跳转到第三方工具网站。',
-  url: 'https://example.com',
-  badge: '外部'
-}
-```
-
-这样卡片按钮会直接跳到外部页面。
-
----
-
-### 5.3 如果这个工具是你自己站内的新页面
-如果是你自己要在站内新增一个工具页面，那么除了改 `site.config.js`，还需要再做一步：
-
-#### 需要改的内容
-1. 在 `site.config.js` 的 `tools` 数组里新增配置
-2. 新建对应页面文件，例如：
-
-```text
-tools/image-compress/index.html
-```
-
-3. 把 `url` 指向这个页面，例如：
-
-```js
-url: '/tools/image-compress'
-```
-
-也就是说：
-- **只想新增入口** → 改配置
-- **想新增真实工具页面** → 改配置 + 新建页面文件
-
----
-
-## 6. 工具卡片按钮是怎么生成的
-
-当前工具页和首页都走统一卡片渲染逻辑。
-
-在 `app.js` 中：
-
-- 首页使用：`initHome()`
-- 工具页使用：`initTools()`
-
-现在这两处都已经配置为统一的卡片按钮样式：
-
-- 首页：默认文案为 `进入入口`
-- 工具页：默认文案为 `查看工具`
-- 两者都使用统一的按钮 class 组合
-
-工具页的这部分逻辑在概念上是：
-
-```js
-renderList('#tools-grid', config.tools, {
-  actionLabel: '查看工具',
-  actionClass: 'text-link card-cta button button--ghost'
-});
-```
-
-这意味着如果你只是往 `tools` 数组里增加工具项，按钮样式会自动和现有工具卡片保持一致。
-
----
-
-## 7. 如果想单独定制某个工具卡片按钮
-
-除了使用默认“查看工具”之外，当前卡片逻辑还支持给单个工具单独指定：
-
-- `actionLabel`
-- `actionClass`
-
-例如：
-
-```js
-{
-  title: '图片压缩',
-  description: '压缩图片体积。',
-  url: '/tools/image-compress',
-  badge: '新工具',
-  actionLabel: '立即使用'
-}
-```
-
-这样这个工具卡片就不会显示默认的“查看工具”，而是显示“立即使用”。
-
-如果你还给它传了 `actionClass`，还可以覆盖默认按钮样式。
-
-不过通常建议：
-- 默认情况下尽量沿用统一按钮样式
-- 只有在某个工具确实需要特别强调时，再做单独定制
-
----
-
-## 8. 常见维护场景总结
+## 4. 常见维护场景
 
 ### 场景 1：修改首页文案
-改：
-- `site.config.js`
+直接改 `index.html` 里对应的 `<h1>` / `<p class="lead">`。
 
-### 场景 2：修改首页入口卡片内容
-改：
-- `site.config.js` 里的 `quickLinks`
+### 场景 2：修改首页入口卡片
+改 `index.html` 中 `.card-grid` 里的 `<article class="panel card">` 块。
+卡片结构模板：
+
+```html
+<article class="panel card">
+  <div class="card-top">
+    <span class="badge">标签</span>
+    <h3>卡片标题</h3>
+  </div>
+  <p>卡片描述文字。</p>
+  <a
+    class="text-link card-cta button button--ghost"
+    href="/目标地址"
+    aria-label="进入卡片标题"
+  >进入入口</a>
+</article>
+```
+
+> `aria-label` 一定要写成具体内容，否则屏幕阅读器会读到一串一模一样的「进入入口」。
 
 ### 场景 3：新增工具页卡片
-改：
-- `site.config.js` 里的 `tools`
+改 `tools/index.html` 中 `.card-grid` 里的内容。
 
-### 场景 4：调整按钮、卡片、间距、页脚、标题视觉
-改：
-- `styles.css`
+**已接入的工具**用上面的 `<a>` 结构；
+**还没做好的占位工具**用禁用态，不要给假链接：
 
-### 场景 5：修改卡片生成逻辑或按钮渲染规则
-改：
-- `app.js`
+```html
+<article class="panel card card--disabled">
+  <div class="card-top">
+    <span class="badge">待接入</span>
+    <h3>工具名称</h3>
+  </div>
+  <p>工具说明。</p>
+  <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
+</article>
+```
 
-### 场景 6：新增一个站内真实工具页面
-改：
-- `site.config.js`
-- 新建 `tools/xxx/index.html`
-- 如有需要，再补对应样式或脚本
+### 场景 4：新增一个站内真实工具页面
+1. 新建 `tools/xxx/index.html`（可直接复制 `tools/index.html` 改）
+2. 在 `tools/index.html` 加一张指向它的卡片
+3. 在 `sitemap.xml` 补一条 `<url>`
+
+### 场景 5：调整视觉
+改 `styles.css`。改颜色优先改 `:root` 的变量，并记得**同步改暗色那一份**。
+
+### 场景 6：更换收款码图片
+不要直接丢一张大图进去。按下面流程处理（原图 2.1MB → 现在 89KB）：
+
+```bash
+python3 -m venv /tmp/imgvenv && /tmp/imgvenv/bin/pip install pillow
+/tmp/imgvenv/bin/python - <<'PY'
+from PIL import Image
+im = Image.open('新收款码.png').convert('RGB')
+for w in (560, 820):
+    h = round(im.height * w / im.width)
+    r = im.resize((w, h), Image.LANCZOS)
+    name = 'zhifubao-donate' + ('' if w == 820 else f'-{w}')
+    r.save(f'donate/{name}.webp', 'WEBP', quality=88, method=6)
+    r.save(f'donate/{name}.jpg', 'JPEG', quality=85, optimize=True,
+           progressive=True, subsampling=0)
+PY
+```
+
+然后确认 `donate/index.html` 里 `<img>` 的 `width` / `height` 和新图比例一致。
 
 ---
 
-## 9. 建议的维护原则
+## 5. 性能与质量约定
 
-为了让这个项目后续更好维护，建议遵循下面这些规则：
+这些是当前已经做到的状态，改动时请不要破坏：
 
-1. **优先改配置，不要先改逻辑**
-   - 能在 `site.config.js` 解决的，优先不要动 `app.js`
+| 项目 | 当前状态 |
+| --- | --- |
+| 首页总传输 | ~15 KB（HTML + CSS + favicon） |
+| 投喂页总传输 | ~105 KB |
+| 外部域请求 | **0 个**（图标已本地化） |
+| 首屏内容 | 随 HTML 到达，不依赖 JS |
+| 图片 CLS | 已用 `width`/`height` 占位，无抖动 |
+| 暗色模式 | 跟随系统 `prefers-color-scheme` |
+| 对比度 | 亮色 / 暗色均通过 WCAG AA |
 
-2. **样式统一集中在 `styles.css`**
-   - 不要把样式零散写到多个 HTML 页面中
+具体要求：
 
-3. **新增工具时先想清楚是“入口”还是“真实页面”**
-   - 外链入口只改配置
-   - 站内页面需要真的创建文件
-
-4. **尽量复用已有卡片样式和按钮样式**
-   - 这样整体视觉更统一
-
-5. **页面结构尽量保持简单**
-   - 这个项目的优势就是轻量、直接、可快速维护
+1. **不要引入外部 CDN 资源**（字体、图标、脚本），会拖慢首屏并暴露隐私
+2. **不要把首屏内容改成 JS 渲染**，会拖慢 LCP 且爬虫抓不到
+3. **图片必须带 `width` / `height`**，否则会造成布局抖动
+4. **新增图片先压缩**，参考场景 6 的流程
+5. **颜色只写变量**，参考 3.2 的约定
 
 ---
 
-## 10. 一句话结论
+## 6. 一句话结论
 
-如果你要维护这个项目，可以这样记：
+- **改内容 / 改卡片** → 直接改对应的 `index.html`
+- **改样式 / 改配色** → 改 `styles.css`（亮暗两份变量都要改）
+- **改缓存 / 安全头** → 改 `_headers`
+- **换图片** → 先按场景 6 压缩，再替换
 
-- **改内容** 看 `site.config.js`
-- **改样式** 看 `styles.css`
-- **改渲染逻辑** 看 `app.js`
-- **改页面结构** 看各自的 `index.html`
-- **新增工具入口** 通常只需要改 `site.config.js` 里的 `tools` 数组
-
-如果后面你还想继续扩展，建议优先保持现在这种“配置驱动 + 统一卡片渲染 + 全站公共样式”的结构，会比较省心喵～
+保持「纯静态 HTML + 单一样式表 + 零外部依赖」这个结构，站点就会一直很快喵～

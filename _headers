@@ -1,2 +1,35 @@
+# Cloudflare Pages 响应头配置
+#
+# 注意：CF Pages 对同名响应头是「拼接」而不是「覆盖」。
+# 如果在 /* 里写了 Cache-Control，再在 /*.css 里写一次，
+# 结果会变成 "max-age=0, must-revalidate, public, max-age=86400"，
+# 浏览器取第一个 max-age，长缓存直接失效。
+# 所以 /* 只放安全头，Cache-Control 一律按文件类型单独声明，互不重叠。
+# HTML 不声明，走 CF 默认的 max-age=0, must-revalidate（改完即时生效）。
+
 /*
-  Cache-Control: public, max-age=3600
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# 样式文件没有内容哈希，改动后需要及时生效，所以只缓存一天
+/*.css
+  Cache-Control: public, max-age=86400
+
+/manifest.webmanifest
+  Cache-Control: public, max-age=86400
+
+# 图片与图标改动时会连带换文件名，可以放心长缓存
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
