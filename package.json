@@ -5,6 +5,7 @@
   "description": "A deployable static navigation site for sakimu.com",
   "scripts": {
     "dev": "npx wrangler pages dev .",
-    "start": "npx wrangler pages dev ."
+    "start": "npx wrangler pages dev .",
+    "sitemap": "node scripts/build-sitemap.mjs"
   }
 }

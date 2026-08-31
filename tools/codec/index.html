@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Base64 编码解码与 URL 编码转换 - 支持中文 | Sakimu</title>
+    <meta
+      name="description"
+      content="在线 Base64 编码解码与 URL 编码解码工具，完整支持中文（内部按 UTF-8 处理字节）。全部在浏览器本地运行，不上传数据。"
+    />
+    <meta name="author" content="Sakimu" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content="Sakimu" />
+    <meta property="og:title" content="Base64 与 URL 编码转换" />
+    <meta
+      property="og:description"
+      content="在线 Base64 与 URL 编码解码，完整支持中文，浏览器本地运行。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sakimu.com/tools/codec/" />
+    <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 在线开发工具封面图" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Base64 与 URL 编码转换" />
+    <meta name="twitter:description" content="在线 Base64 与 URL 编码解码，完整支持中文，浏览器本地运行。" />
+    <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sakimu 在线开发工具封面图" />
+
+    <link rel="canonical" href="https://sakimu.com/tools/codec/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+    <script src="/tools/tools.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sakimu.com/tools/codec/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "https://sakimu.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "在线工具",
+                "item": "https://sakimu.com/tools/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Base64 与 URL 编码转换",
+                "item": "https://sakimu.com/tools/codec/"
+              }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/tools/codec/#webpage",
+            "url": "https://sakimu.com/tools/codec/",
+            "name": "Base64 编码解码与 URL 编码转换 - 支持中文 | Sakimu",
+            "description": "在线 Base64 与 URL 编码解码，完整支持中文，浏览器本地运行。",
+            "isPartOf": {
+              "@id": "https://sakimu.com/#website"
+            },
+            "breadcrumb": {
+              "@id": "https://sakimu.com/tools/codec/#breadcrumb"
+            },
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://sakimu.com/tools/codec/#app",
+            "name": "Base64 与 URL 编码转换",
+            "url": "https://sakimu.com/tools/codec/",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "description": "在线 Base64 与 URL 编码解码，完整支持中文，浏览器本地运行。",
+            "inLanguage": "zh-CN",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "CNY"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://sakimu.com/tools/codec/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "为什么中文的 Base64 结果和别的工具不一样？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Base64 编码的是字节而不是字符，所以结果取决于先用哪种字符编码把文本转成字节。本工具统一使用 UTF-8，这是 Web 上的通行做法。如果对方工具用的是 GBK，结果自然不同。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "URL 编码用的是哪个函数？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "encodeURIComponent。它会把 & = ? / # 这类分隔符一并编码，适合用来编码单个查询参数的值。如果你要编码的是一整个 URL，用它会把 :// 也编码掉，那种场景应该用 encodeURI。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Base64 解码失败是什么原因？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "通常是两种情况：字符串被截断了，或者缺少末尾用来补位的等号。Base64 的长度必须是 4 的倍数，不足时用 = 补齐。另外如果原始字节不是合法的 UTF-8 序列，解码成文本时也会失败。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Base64 是加密吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "不是。Base64 只是把二进制数据表示成纯文本字符的编码方式，任何人都能直接解开。不要用它来保护密码或任何敏感信息。"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body data-page="tool-codec">
+    <div class="page-shell">
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-mark-64.webp" alt="" width="64" height="64" decoding="async" />
+            <span>Sakimu</span>
+          </a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
+            <a href="/tools/" class="is-active" aria-current="page">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
+
+      <main class="container page-main">
+        <section class="panel tool-page">
+          <nav class="breadcrumb" aria-label="面包屑导航">
+            <a href="/">首页</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <a href="/tools/">在线工具</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <span aria-current="page">编码转换</span>
+          </nav>
+          <span class="eyebrow">工具</span>
+          <h1>Base64 与 URL 编码转换</h1>
+          <p class="tool-page__lead">Base64 编码解码完整支持中文，内部先把文本转成 UTF-8 字节再编码。URL 编码使用 encodeURIComponent 规则。</p>
+
+          <noscript>
+            <p class="tool-noscript">
+              这个工具需要浏览器执行 JavaScript 才能运行。脚本只在本地处理你的输入，不会发送任何数据。
+            </p>
+          </noscript>
+
+          <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="codec-input">输入文本</label>
+                  <textarea class="textarea" id="codec-input" spellcheck="false" placeholder="要编码或解码的内容"></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="codec-output">输出结果</label>
+                  <textarea class="textarea" id="codec-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="codec-b64-encode">Base64 编码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-b64-decode">Base64 解码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-url-encode">URL 编码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-url-decode">URL 解码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-swap">结果放回输入</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-copy">复制结果</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-clear">清空</button>
+              </div>
+              <p class="tool__status" id="codec-status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="howto-title">
+          <h2 id="howto-title">怎么用</h2>
+          <p>在左边输入内容，选一个转换方向。「结果放回输入」用来做连续转换，比如一段既做了 URL 编码又做了 Base64 编码的字符串，可以先解一层再解一层。</p>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="faq-title">
+          <h2 id="faq-title">常见问题</h2>
+              <div class="faq-item">
+                <h3>为什么中文的 Base64 结果和别的工具不一样？</h3>
+                <p>Base64 编码的是字节而不是字符，所以结果取决于先用哪种字符编码把文本转成字节。本工具统一使用 UTF-8，这是 Web 上的通行做法。如果对方工具用的是 GBK，结果自然不同。</p>
+              </div>
+              <div class="faq-item">
+                <h3>URL 编码用的是哪个函数？</h3>
+                <p>encodeURIComponent。它会把 &amp; = ? / # 这类分隔符一并编码，适合用来编码单个查询参数的值。如果你要编码的是一整个 URL，用它会把 :// 也编码掉，那种场景应该用 encodeURI。</p>
+              </div>
+              <div class="faq-item">
+                <h3>Base64 解码失败是什么原因？</h3>
+                <p>通常是两种情况：字符串被截断了，或者缺少末尾用来补位的等号。Base64 的长度必须是 4 的倍数，不足时用 = 补齐。另外如果原始字节不是合法的 UTF-8 序列，解码成文本时也会失败。</p>
+              </div>
+              <div class="faq-item">
+                <h3>Base64 是加密吗？</h3>
+                <p>不是。Base64 只是把二进制数据表示成纯文本字符的编码方式，任何人都能直接解开。不要用它来保护密码或任何敏感信息。</p>
+              </div>
+        </section>
+
+        <section class="panel tool-siblings" aria-labelledby="siblings-title">
+          <p class="tool-siblings__title" id="siblings-title">其他工具</p>
+          <div class="tools-jump">
+            <a href="/tools/json/">JSON 格式化</a>
+            <a href="/tools/regex/">正则测试</a>
+            <a href="/tools/timestamp/">时间戳转换</a>
+            <a href="/tools/">全部工具</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer container">
+        <p class="site-footer__meta">
+          <span>© <span data-year>2026</span> Sakimu.</span>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >皖ICP备2020020404号-5</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

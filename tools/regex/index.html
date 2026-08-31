@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>正则表达式在线测试 - 匹配位置、捕获分组一次看清 | Sakimu</title>
+    <meta
+      name="description"
+      content="在线正则表达式测试工具：输入正则与测试文本，列出每一处匹配的位置、匹配内容以及编号分组和具名分组的值。基于 JavaScript RegExp，浏览器本地运行。"
+    />
+    <meta name="author" content="Sakimu" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content="Sakimu" />
+    <meta property="og:title" content="正则表达式在线测试" />
+    <meta
+      property="og:description"
+      content="输入正则与测试文本，列出全部匹配位置、匹配内容与捕获分组。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sakimu.com/tools/regex/" />
+    <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 在线开发工具封面图" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="正则表达式在线测试" />
+    <meta name="twitter:description" content="输入正则与测试文本，列出全部匹配位置、匹配内容与捕获分组。" />
+    <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sakimu 在线开发工具封面图" />
+
+    <link rel="canonical" href="https://sakimu.com/tools/regex/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+    <script src="/tools/tools.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sakimu.com/tools/regex/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "https://sakimu.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "在线工具",
+                "item": "https://sakimu.com/tools/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "正则表达式在线测试",
+                "item": "https://sakimu.com/tools/regex/"
+              }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/tools/regex/#webpage",
+            "url": "https://sakimu.com/tools/regex/",
+            "name": "正则表达式在线测试 - 匹配位置、捕获分组一次看清 | Sakimu",
+            "description": "输入正则与测试文本，列出全部匹配位置、匹配内容与捕获分组。",
+            "isPartOf": {
+              "@id": "https://sakimu.com/#website"
+            },
+            "breadcrumb": {
+              "@id": "https://sakimu.com/tools/regex/#breadcrumb"
+            },
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://sakimu.com/tools/regex/#app",
+            "name": "正则表达式在线测试",
+            "url": "https://sakimu.com/tools/regex/",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "description": "输入正则与测试文本，列出全部匹配位置、匹配内容与捕获分组。",
+            "inLanguage": "zh-CN",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "CNY"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://sakimu.com/tools/regex/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "为什么只匹配到第一处？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "标志位里没有加 g。不加 g 时正则只返回第一个匹配，这是 JavaScript RegExp 的默认行为，本工具会在结果里明确提示。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "标志位都有哪些？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "g 全局匹配、i 忽略大小写、m 让 ^ 和 $ 匹配每一行的首尾、s 让点号也能匹配换行符、u 启用 Unicode 模式、y 粘性匹配。可以组合使用，比如 gi。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "支持的是哪种正则方言？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JavaScript（ECMAScript）的 RegExp。它支持前瞻、后顾、具名分组和 Unicode 属性转义，但不支持 PCRE 里的原子组、占有量词和递归匹配，也没有 \\A 和 \\z 这两个锚点。从 Python 或 PHP 迁移正则时要留意这些差异。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "为什么结果最多只有 2000 条？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "这是防止病态正则把页面卡死的保护上限。某些写法在特定输入下会产生灾难性回溯，浏览器会长时间无响应，所以全局匹配达到 2000 条就会停下来并给出提示。"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body data-page="tool-regex">
+    <div class="page-shell">
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-mark-64.webp" alt="" width="64" height="64" decoding="async" />
+            <span>Sakimu</span>
+          </a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
+            <a href="/tools/" class="is-active" aria-current="page">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
+
+      <main class="container page-main">
+        <section class="panel tool-page">
+          <nav class="breadcrumb" aria-label="面包屑导航">
+            <a href="/">首页</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <a href="/tools/">在线工具</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <span aria-current="page">正则测试</span>
+          </nav>
+          <span class="eyebrow">工具</span>
+          <h1>正则表达式在线测试</h1>
+          <p class="tool-page__lead">输入正则和测试文本，列出每一处匹配的位置、匹配内容，以及编号分组和具名分组的值。基于浏览器内建的 JavaScript RegExp 引擎。</p>
+
+          <noscript>
+            <p class="tool-noscript">
+              这个工具需要浏览器执行 JavaScript 才能运行。脚本只在本地处理你的输入，不会发送任何数据。
+            </p>
+          </noscript>
+
+          <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="regex-pattern">正则表达式</label>
+                  <input class="input" id="regex-pattern" type="text" spellcheck="false" autocomplete="off" placeholder="\d{4}-\d{2}-\d{2}" />
+                </div>
+                <div class="field">
+                  <label class="field__label" for="regex-flags">标志位 flags</label>
+                  <input class="input" id="regex-flags" type="text" spellcheck="false" autocomplete="off" value="g" placeholder="g / i / m / s / u" />
+                </div>
+              </div>
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="regex-text">测试文本</label>
+                  <textarea class="textarea" id="regex-text" spellcheck="false" placeholder="把要匹配的文本粘贴到这里"></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="regex-output">匹配结果</label>
+                  <textarea class="textarea" id="regex-output" spellcheck="false" readonly placeholder="匹配结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="regex-run">开始匹配</button>
+                <button type="button" class="button button--ghost button--sm" id="regex-clear">清空</button>
+              </div>
+              <p class="tool__status" id="regex-status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="howto-title">
+          <h2 id="howto-title">怎么用</h2>
+          <p>正则只填表达式本身，不需要写两边的斜杠。标志位单独填在右边，默认是 g。匹配结果会按顺序列出每一处的起始位置和内容，有捕获分组时逐个列在下面。</p>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="faq-title">
+          <h2 id="faq-title">常见问题</h2>
+              <div class="faq-item">
+                <h3>为什么只匹配到第一处？</h3>
+                <p>标志位里没有加 g。不加 g 时正则只返回第一个匹配，这是 JavaScript RegExp 的默认行为，本工具会在结果里明确提示。</p>
+              </div>
+              <div class="faq-item">
+                <h3>标志位都有哪些？</h3>
+                <p>g 全局匹配、i 忽略大小写、m 让 ^ 和 $ 匹配每一行的首尾、s 让点号也能匹配换行符、u 启用 Unicode 模式、y 粘性匹配。可以组合使用，比如 gi。</p>
+              </div>
+              <div class="faq-item">
+                <h3>支持的是哪种正则方言？</h3>
+                <p>JavaScript（ECMAScript）的 RegExp。它支持前瞻、后顾、具名分组和 Unicode 属性转义，但不支持 PCRE 里的原子组、占有量词和递归匹配，也没有 \A 和 \z 这两个锚点。从 Python 或 PHP 迁移正则时要留意这些差异。</p>
+              </div>
+              <div class="faq-item">
+                <h3>为什么结果最多只有 2000 条？</h3>
+                <p>这是防止病态正则把页面卡死的保护上限。某些写法在特定输入下会产生灾难性回溯，浏览器会长时间无响应，所以全局匹配达到 2000 条就会停下来并给出提示。</p>
+              </div>
+        </section>
+
+        <section class="panel tool-siblings" aria-labelledby="siblings-title">
+          <p class="tool-siblings__title" id="siblings-title">其他工具</p>
+          <div class="tools-jump">
+            <a href="/tools/json/">JSON 格式化</a>
+            <a href="/tools/codec/">编码转换</a>
+            <a href="/tools/timestamp/">时间戳转换</a>
+            <a href="/tools/">全部工具</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer container">
+        <p class="site-footer__meta">
+          <span>© <span data-year>2026</span> Sakimu.</span>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >皖ICP备2020020404号-5</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON 格式化与校验 - 在线 JSON 美化、压缩、语法检查 | Sakimu</title>
+    <meta
+      name="description"
+      content="在线 JSON 格式化工具：把压缩的 JSON 展开为带缩进的可读格式，或压缩回单行，同时校验语法并定位错误。全部在浏览器本地运行，不上传数据。"
+    />
+    <meta name="author" content="Sakimu" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content="Sakimu" />
+    <meta property="og:title" content="JSON 格式化与校验" />
+    <meta
+      property="og:description"
+      content="在线把 JSON 展开成可读格式或压缩回单行，同时校验语法并定位错误。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sakimu.com/tools/json/" />
+    <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 在线开发工具封面图" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JSON 格式化与校验" />
+    <meta name="twitter:description" content="在线把 JSON 展开成可读格式或压缩回单行，同时校验语法并定位错误。" />
+    <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sakimu 在线开发工具封面图" />
+
+    <link rel="canonical" href="https://sakimu.com/tools/json/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+    <script src="/tools/tools.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sakimu.com/tools/json/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "https://sakimu.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "在线工具",
+                "item": "https://sakimu.com/tools/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "JSON 格式化与校验",
+                "item": "https://sakimu.com/tools/json/"
+              }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/tools/json/#webpage",
+            "url": "https://sakimu.com/tools/json/",
+            "name": "JSON 格式化与校验 - 在线 JSON 美化、压缩、语法检查 | Sakimu",
+            "description": "在线把 JSON 展开成可读格式或压缩回单行，同时校验语法并定位错误。",
+            "isPartOf": {
+              "@id": "https://sakimu.com/#website"
+            },
+            "breadcrumb": {
+              "@id": "https://sakimu.com/tools/json/#breadcrumb"
+            },
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://sakimu.com/tools/json/#app",
+            "name": "JSON 格式化与校验",
+            "url": "https://sakimu.com/tools/json/",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Any",
+            "description": "在线把 JSON 展开成可读格式或压缩回单行，同时校验语法并定位错误。",
+            "inLanguage": "zh-CN",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "CNY"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://sakimu.com/tools/json/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "数据会上传到服务器吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "不会。整个过程用浏览器内建的 JSON.parse 和 JSON.stringify 完成，输入的内容不会离开你的设备。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "为什么提示 Unexpected token？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "最常见的三个原因：字符串用了单引号、键名没加引号、数组或对象末尾多了一个逗号。JSON 规范只接受双引号，并且不允许尾随逗号，这三点都和 JavaScript 对象字面量不一样。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "缩进能改成 4 个空格或 Tab 吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "目前固定为 2 个空格。这是 JSON 配置文件和大多数前端项目的通行约定，暂时没有做成可选项。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "能处理多大的 JSON？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "受浏览器内存限制，几 MB 的文件通常没问题。如果是几十 MB 以上的日志或导出数据，建议改用命令行的 jq，浏览器一次性解析会明显卡顿。"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body data-page="tool-json">
+    <div class="page-shell">
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-mark-64.webp" alt="" width="64" height="64" decoding="async" />
+            <span>Sakimu</span>
+          </a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
+            <a href="/tools/" class="is-active" aria-current="page">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
+
+      <main class="container page-main">
+        <section class="panel tool-page">
+          <nav class="breadcrumb" aria-label="面包屑导航">
+            <a href="/">首页</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <a href="/tools/">在线工具</a>
+            <span class="breadcrumb__sep" aria-hidden="true">/</span>
+            <span aria-current="page">JSON 格式化</span>
+          </nav>
+          <span class="eyebrow">工具</span>
+          <h1>JSON 格式化与校验</h1>
+          <p class="tool-page__lead">把压缩成一行的 JSON 展开成带缩进的可读格式，或者反过来压缩回单行。语法有问题时会直接指出错在第几个字符。</p>
+
+          <noscript>
+            <p class="tool-noscript">
+              这个工具需要浏览器执行 JavaScript 才能运行。脚本只在本地处理你的输入，不会发送任何数据。
+            </p>
+          </noscript>
+
+          <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="json-input">输入 JSON</label>
+                  <textarea class="textarea" id="json-input" spellcheck="false" placeholder='{"name":"sakimu","tags":["blog","tools"]}'></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="json-output">输出结果</label>
+                  <textarea class="textarea" id="json-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="json-format">格式化</button>
+                <button type="button" class="button button--ghost button--sm" id="json-minify">压缩为单行</button>
+                <button type="button" class="button button--ghost button--sm" id="json-copy">复制结果</button>
+                <button type="button" class="button button--ghost button--sm" id="json-clear">清空</button>
+              </div>
+              <p class="tool__status" id="json-status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="howto-title">
+          <h2 id="howto-title">怎么用</h2>
+          <p>把 JSON 粘贴到左边，点「格式化」得到缩进两个空格的可读版本，点「压缩为单行」则去掉所有空白。两个操作都会先完整解析一遍，所以也等于做了一次语法校验。</p>
+        </section>
+
+        <section class="panel tool-doc" aria-labelledby="faq-title">
+          <h2 id="faq-title">常见问题</h2>
+              <div class="faq-item">
+                <h3>数据会上传到服务器吗？</h3>
+                <p>不会。整个过程用浏览器内建的 JSON.parse 和 JSON.stringify 完成，输入的内容不会离开你的设备。</p>
+              </div>
+              <div class="faq-item">
+                <h3>为什么提示 Unexpected token？</h3>
+                <p>最常见的三个原因：字符串用了单引号、键名没加引号、数组或对象末尾多了一个逗号。JSON 规范只接受双引号，并且不允许尾随逗号，这三点都和 JavaScript 对象字面量不一样。</p>
+              </div>
+              <div class="faq-item">
+                <h3>缩进能改成 4 个空格或 Tab 吗？</h3>
+                <p>目前固定为 2 个空格。这是 JSON 配置文件和大多数前端项目的通行约定，暂时没有做成可选项。</p>
+              </div>
+              <div class="faq-item">
+                <h3>能处理多大的 JSON？</h3>
+                <p>受浏览器内存限制，几 MB 的文件通常没问题。如果是几十 MB 以上的日志或导出数据，建议改用命令行的 jq，浏览器一次性解析会明显卡顿。</p>
+              </div>
+        </section>
+
+        <section class="panel tool-siblings" aria-labelledby="siblings-title">
+          <p class="tool-siblings__title" id="siblings-title">其他工具</p>
+          <div class="tools-jump">
+            <a href="/tools/codec/">编码转换</a>
+            <a href="/tools/regex/">正则测试</a>
+            <a href="/tools/timestamp/">时间戳转换</a>
+            <a href="/tools/">全部工具</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer container">
+        <p class="site-footer__meta">
+          <span>© <span data-year>2026</span> Sakimu.</span>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >皖ICP备2020020404号-5</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

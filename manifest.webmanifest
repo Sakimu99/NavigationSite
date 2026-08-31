@@ -1,7 +1,7 @@
 {
   "name": "Sakimu 导航站",
   "short_name": "Sakimu",
-  "description": "Sakimu 的个人导航站，聚合主站、博客、工具页与投喂页入口。",
+  "description": "Sakimu 的个人导航站，聚合博客、在线开发工具与投喂入口。",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -20,6 +20,24 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "在线工具",
+      "short_name": "工具",
+      "url": "/tools/"
+    },
+    {
+      "name": "博客",
+      "short_name": "博客",
+      "url": "https://blog.sakimu.com"
     }
   ]
 }

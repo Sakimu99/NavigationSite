@@ -37,7 +37,7 @@
 
     <link rel="canonical" href="https://sakimu.com/" />
     <link rel="stylesheet" href="/styles.css" />
-    <link rel="preload" as="image" href="/icon-192.png" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" href="/avatar-256.webp" fetchpriority="high" />
     <script src="/app.js" defer></script>
 
     <script type="application/ld+json">
@@ -110,14 +110,7 @@
       <div class="site-header-bar">
         <header class="site-header container">
           <a class="brand" href="/">
-            <img
-              class="brand__mark"
-              src="/icon-192.png"
-              alt=""
-              width="192"
-              height="192"
-              decoding="async"
-            />
+            <img class="brand__mark" src="/icon-mark-64.webp" alt="" width="64" height="64" decoding="async" />
             <span>Sakimu</span>
           </a>
           <nav class="site-nav" aria-label="站点导航">
@@ -147,15 +140,18 @@
               </div>
             </div>
             <div class="hero-visual">
-              <img
-                class="hero-avatar"
-                src="/icon-192.png"
-                alt=""
-                width="192"
-                height="192"
-                fetchpriority="high"
-                decoding="async"
-              />
+              <picture>
+                <source type="image/webp" srcset="/avatar-256.webp" />
+                <img
+                  class="hero-avatar"
+                  src="/icon-192.png"
+                  alt=""
+                  width="256"
+                  height="256"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              </picture>
             </div>
           </div>
         </section>
