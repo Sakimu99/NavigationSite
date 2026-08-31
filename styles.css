@@ -46,7 +46,8 @@
   --fs-lead: 1.0625rem;
   --fs-body: 0.9688rem;
   --fs-sm: 0.875rem;
-  --fs-xs: 0.75rem;
+  /* 13px 而不是 12px：中文在 Windows 上 12px 会明显发糊、发挤 */
+  --fs-xs: 0.8125rem;
 
   --radius-xl: 24px;
   --radius-lg: 18px;
@@ -99,6 +100,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Windows 用占位式滚动条，预留出来避免出现/消失时布局跳动 */
+  scrollbar-gutter: stable;
   /* 锚点跳转时给固定头部留出空间 */
   scroll-padding-top: 84px;
 }
@@ -106,11 +109,12 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   font-size: var(--fs-body);
   color: var(--text);
   background: var(--bg);
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -322,6 +326,9 @@ p {
   border-radius: 999px;
   font-size: var(--fs-sm);
   font-weight: 600;
+  /* 锁定行高：Windows 中文默认行高更大，会把文字顶到按钮边缘 */
+  line-height: 1.2;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -618,9 +625,12 @@ p {
   gap: 8px;
 }
 
+/* 不用 auto-fit：它按内在尺寸推算列数，遇到 Windows 上更宽的
+   datetime-local 会算出放不下的两列然后溢出。改成确定性断点，
+   两列各自 minmax(0,1fr) 可自由收缩，配合 .field 的 min-width:0 不可能顶破。 */
 .tool__row--split {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
   gap: 12px;
 }
@@ -642,6 +652,10 @@ p {
 .input,
 .textarea {
   width: 100%;
+  /* 表单控件有内在最小宽度（Windows 的 datetime-local 尤其宽），
+     不显式归零会顶破网格轨道 */
+  min-width: 0;
+  max-width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
@@ -668,14 +682,15 @@ p {
 }
 
 .button--sm {
-  min-height: 34px;
-  padding: 0 14px;
+  min-height: 36px;
+  padding: 0 16px;
   font-size: var(--fs-xs);
   font-weight: 620;
 }
 
 .tool__status {
   min-height: 20px;
+  overflow-wrap: anywhere;
   font-size: var(--fs-xs);
   color: var(--muted);
 }
@@ -822,7 +837,7 @@ p {
 
 .donate-card {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(240px, 300px);
+  grid-template-columns: minmax(0, 1.05fr) minmax(min(100%, 240px), 300px);
   align-items: center;
   gap: 32px;
   padding: 32px;
@@ -960,6 +975,13 @@ p {
 
 /* ---------- 响应式 ---------- */
 
+@media (max-width: 860px) {
+  /* 两列低于此宽度就装不下 Windows 版 datetime-local，直接单列 */
+  .tool__row--split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 1000px) {
   .card {
     grid-column: span 6;
@@ -1011,13 +1033,6 @@ p {
   .hero-avatar {
     width: 78px;
     height: 78px;
-  }
-}
-
-@media (max-width: 720px) {
-  .site-header {
-    align-items: start;
-    flex-direction: column;
   }
 }
 
