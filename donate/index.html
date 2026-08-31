@@ -8,6 +8,7 @@
       name="description"
       content="Sakimu 的投喂页，用于展示赞助方式、支持说明和捐助入口。"
     />
+    <meta name="author" content="Sakimu" />
     <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
 
@@ -26,6 +27,7 @@
     <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 投喂页封面图" />
     <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sakimu 投喂页" />
@@ -34,6 +36,7 @@
 
     <link rel="canonical" href="https://sakimu.com/donate/" />
     <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
     <link
       rel="preload"
       as="image"
@@ -41,15 +44,44 @@
       imagesrcset="./zhifubao-donate-560.webp 560w, ./zhifubao-donate.webp 820w"
       imagesizes="(max-width: 640px) 220px, 262px"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sakimu.com/donate/#breadcrumb",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://sakimu.com/" },
+              { "@type": "ListItem", "position": 2, "name": "投喂", "item": "https://sakimu.com/donate/" }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/donate/#webpage",
+            "url": "https://sakimu.com/donate/",
+            "name": "投喂页 | Sakimu",
+            "description": "支持作者继续创作与维护工具的捐助页面。",
+            "isPartOf": { "@id": "https://sakimu.com/#website" },
+            "breadcrumb": { "@id": "https://sakimu.com/donate/#breadcrumb" },
+            "inLanguage": "zh-CN"
+          }
+        ]
+      }
+    </script>
   </head>
   <body data-page="donate">
     <div class="page-shell">
       <div class="site-header-bar">
         <header class="site-header container">
-          <a class="brand" href="/">Sakimu</a>
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-192.png" alt="" width="192" height="192" decoding="async" />
+            <span>Sakimu</span>
+          </a>
           <nav class="site-nav" aria-label="站点导航">
             <a href="/">首页</a>
-            <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
             <a href="/tools/">工具</a>
             <a href="/donate/" class="is-active" aria-current="page">投喂</a>
           </nav>
@@ -114,11 +146,5 @@
         </p>
       </footer>
     </div>
-
-    <script>
-      document.querySelectorAll('[data-year]').forEach((n) => {
-        n.textContent = String(new Date().getFullYear());
-      });
-    </script>
   </body>
 </html>

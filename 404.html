@@ -13,14 +13,30 @@
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
   </head>
   <body data-page="404">
     <div class="page-shell">
+      <div class="site-header-bar">
+        <header class="site-header container">
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-192.png" alt="" width="192" height="192" decoding="async" />
+            <span>Sakimu</span>
+          </a>
+          <nav class="site-nav" aria-label="站点导航">
+            <a href="/">首页</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
+            <a href="/tools/">工具</a>
+            <a href="/donate/">投喂</a>
+          </nav>
+        </header>
+      </div>
+
       <main class="container page-main page-main--center">
         <section class="panel not-found">
           <span class="eyebrow">404</span>
           <h1>页面不存在</h1>
-          <p>你访问的页面没有找到，可以先回到导航站首页。</p>
+          <p>你访问的页面没有找到。可以回到首页，或者直接去看看博客和在线工具。</p>
           <a class="button button--primary" href="/">返回首页</a>
         </section>
       </main>
@@ -37,11 +53,5 @@
         </p>
       </footer>
     </div>
-
-    <script>
-      document.querySelectorAll('[data-year]').forEach((n) => {
-        n.textContent = String(new Date().getFullYear());
-      });
-    </script>
   </body>
 </html>

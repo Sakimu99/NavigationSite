@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sakimu 导航站</title>
+    <title>Sakimu 导航站 - 博客、在线工具与个人主页入口</title>
     <meta
       name="description"
-      content="Sakimu 的个人导航站，聚合主站、博客、工具页与投喂页入口。"
+      content="Sakimu 的个人导航站：一个页面聚合技术博客、免费在线开发工具（JSON 格式化、Base64 与 URL 编码、正则测试、时间戳转换）以及投喂支持入口。"
     />
+    <meta name="author" content="Sakimu" />
     <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
 
@@ -16,33 +17,112 @@
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <meta property="og:site_name" content="Sakimu" />
-    <meta property="og:title" content="Sakimu 导航站" />
+    <meta property="og:title" content="Sakimu 导航站 - 博客、在线工具与个人主页入口" />
     <meta
       property="og:description"
-      content="一个可直接部署的个人导航站，聚合博客、工具与赞助入口。"
+      content="一个页面聚合技术博客、免费在线开发工具与投喂支持入口的个人导航站。"
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sakimu.com/" />
     <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 导航站封面图" />
     <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sakimu 导航站" />
-    <meta name="twitter:description" content="聚合博客、工具与赞助入口的个人导航站。" />
+    <meta name="twitter:title" content="Sakimu 导航站 - 博客、在线工具与个人主页入口" />
+    <meta name="twitter:description" content="聚合博客、在线开发工具与投喂入口的个人导航站。" />
     <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sakimu 导航站封面图" />
 
     <link rel="canonical" href="https://sakimu.com/" />
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="preload" as="image" href="/icon-192.png" fetchpriority="high" />
+    <script src="/app.js" defer></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://sakimu.com/#website",
+            "url": "https://sakimu.com/",
+            "name": "Sakimu 导航站",
+            "description": "聚合技术博客、在线开发工具与投喂入口的个人导航站。",
+            "inLanguage": "zh-CN",
+            "publisher": { "@id": "https://sakimu.com/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://sakimu.com/#person",
+            "name": "Sakimu",
+            "url": "https://sakimu.com/",
+            "image": "https://sakimu.com/icon-512.png",
+            "sameAs": ["https://blog.sakimu.com"]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/#webpage",
+            "url": "https://sakimu.com/",
+            "name": "Sakimu 导航站 - 博客、在线工具与个人主页入口",
+            "isPartOf": { "@id": "https://sakimu.com/#website" },
+            "about": { "@id": "https://sakimu.com/#person" },
+            "primaryImageOfPage": "https://sakimu.com/og-image.jpg",
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://sakimu.com/#entries",
+            "name": "站点入口",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 3,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "博客",
+                "description": "技术文章与日常更新记录。",
+                "url": "https://blog.sakimu.com"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "在线工具",
+                "description": "JSON 格式化、Base64 与 URL 编码、正则测试、时间戳转换。",
+                "url": "https://sakimu.com/tools/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "投喂",
+                "description": "支付宝赞助与支持说明。",
+                "url": "https://sakimu.com/donate/"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body data-page="home">
     <div class="page-shell">
       <div class="site-header-bar">
         <header class="site-header container">
-          <a class="brand" href="/">Sakimu</a>
+          <a class="brand" href="/">
+            <img
+              class="brand__mark"
+              src="/icon-192.png"
+              alt=""
+              width="192"
+              height="192"
+              decoding="async"
+            />
+            <span>Sakimu</span>
+          </a>
           <nav class="site-nav" aria-label="站点导航">
             <a href="/" class="is-active" aria-current="page">首页</a>
-            <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
             <a href="/tools/">工具</a>
             <a href="/donate/">投喂</a>
           </nav>
@@ -51,60 +131,87 @@
 
       <main class="page-main page-main--home">
         <section class="hero container hero--simple">
-          <div class="hero-copy panel panel--hero">
-            <span class="eyebrow">主页</span>
-            <h1>Sakimu 导航站</h1>
-            <p class="lead">
-              一个简单的入口页，用来放博客、工具和其他常用链接。
-            </p>
-            <div class="hero-actions">
-              <a class="button button--primary" href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">前往博客</a>
-              <a class="button button--ghost" href="/tools/">查看工具</a>
+          <div class="panel panel--hero">
+            <div class="hero-copy">
+              <span class="eyebrow">主页</span>
+              <h1>Sakimu 导航站</h1>
+              <p class="lead">
+                一个安静的入口页。放我写的博客、自己在用的在线小工具，以及一些常打开的链接。
+              </p>
+              <div class="hero-actions">
+                <a class="button button--primary" href="https://blog.sakimu.com" target="_blank" rel="noopener">
+                  前往博客
+                  <svg class="button__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m12 5 7 7-7 7" /></svg>
+                </a>
+                <a class="button button--ghost" href="/tools/">查看工具</a>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <img
+                class="hero-avatar"
+                src="/icon-192.png"
+                alt=""
+                width="192"
+                height="192"
+                fetchpriority="high"
+                decoding="async"
+              />
             </div>
           </div>
         </section>
 
-        <section class="container section-block section-block--compact">
+        <section class="container section-block section-block--compact" aria-labelledby="entries-title">
+          <h2 id="entries-title" class="visually-hidden">站点入口</h2>
           <div class="card-grid card-grid--simple">
             <article class="panel card">
               <div class="card-top">
-                <span class="badge">内容</span>
-                <h3>博客</h3>
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h8.5L19 9v11.5H5z" /><path d="M13.5 3.5V9H19" /><path d="M8.5 13h7" /><path d="M8.5 16.5h4.5" /></svg>
+                </span>
+                <div class="card-head">
+                  <h3>博客</h3>
+                  <span class="badge">内容</span>
+                </div>
               </div>
-              <p>记录文章和日常更新。</p>
-              <a
-                class="text-link card-cta button button--ghost"
-                href="https://blog.sakimu.com"
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label="进入博客"
-              >进入入口</a>
+              <p>技术笔记、踩坑记录和日常更新，都写在那边。</p>
+              <a class="card-link" href="https://blog.sakimu.com" target="_blank" rel="noopener">
+                前往 blog.sakimu.com
+                <svg class="card-link__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m12 5 7 7-7 7" /></svg>
+              </a>
             </article>
 
             <article class="panel card">
               <div class="card-top">
-                <span class="badge">工具</span>
-                <h3>工具页</h3>
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4" /><path d="M16 8l4 4-4 4" /><path d="M13.6 5.5 10.4 18.5" /></svg>
+                </span>
+                <div class="card-head">
+                  <h3>在线工具</h3>
+                  <span class="badge">工具</span>
+                </div>
               </div>
-              <p>放常用工具和实验页面。</p>
-              <a
-                class="text-link card-cta button button--ghost"
-                href="/tools/"
-                aria-label="进入工具页"
-              >进入入口</a>
+              <p>JSON 格式化、Base64 与 URL 编码、正则测试、时间戳转换，全部在浏览器本地运行。</p>
+              <a class="card-link" href="/tools/">
+                打开工具页
+                <svg class="card-link__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m12 5 7 7-7 7" /></svg>
+              </a>
             </article>
 
             <article class="panel card">
               <div class="card-top">
-                <span class="badge">支持</span>
-                <h3>投喂页</h3>
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3 4.6 12.9a4.8 4.8 0 0 1 6.8-6.8l.6.6.6-.6a4.8 4.8 0 0 1 6.8 6.8z" /></svg>
+                </span>
+                <div class="card-head">
+                  <h3>投喂</h3>
+                  <span class="badge">支持</span>
+                </div>
               </div>
-              <p>放赞助方式和支持说明。</p>
-              <a
-                class="text-link card-cta button button--ghost"
-                href="/donate/"
-                aria-label="进入投喂页"
-              >进入入口</a>
+              <p>如果这些东西帮到你了，可以请小站长喝一杯奶茶喵～</p>
+              <a class="card-link" href="/donate/">
+                去投喂页
+                <svg class="card-link__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13" /><path d="m12 5 7 7-7 7" /></svg>
+              </a>
             </article>
           </div>
         </section>
@@ -122,11 +229,5 @@
         </p>
       </footer>
     </div>
-
-    <script>
-      document.querySelectorAll('[data-year]').forEach((n) => {
-        n.textContent = String(new Date().getFullYear());
-      });
-    </script>
   </body>
 </html>

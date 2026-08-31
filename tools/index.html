@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>工具页 | Sakimu</title>
+    <title>在线开发工具 - JSON 格式化、Base64 编码、正则测试 | Sakimu</title>
     <meta
       name="description"
-      content="Sakimu 的工具页，用于集中展示常用在线工具、服务入口与实验项目。"
+      content="免费在线开发工具集：JSON 格式化与压缩校验、Base64 与 URL 编码解码、正则表达式测试、Unix 时间戳转换。全部在浏览器本地运行，不上传任何数据。"
     />
+    <meta name="author" content="Sakimu" />
     <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)" />
 
@@ -16,33 +17,126 @@
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <meta property="og:site_name" content="Sakimu" />
-    <meta property="og:title" content="Sakimu 工具页" />
+    <meta property="og:title" content="在线开发工具 - JSON 格式化、Base64 编码、正则测试" />
     <meta
       property="og:description"
-      content="集中整理工具入口、效率服务和实验功能。"
+      content="JSON 格式化、Base64 与 URL 编码解码、正则测试、时间戳转换，全部在浏览器本地运行。"
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sakimu.com/tools/" />
     <meta property="og:image" content="https://sakimu.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sakimu 在线开发工具封面图" />
     <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Sakimu 工具页" />
-    <meta name="twitter:description" content="集中整理工具入口、效率服务和实验功能。" />
+    <meta name="twitter:title" content="在线开发工具 - JSON 格式化、Base64 编码、正则测试" />
+    <meta name="twitter:description" content="JSON 格式化、编码解码、正则测试、时间戳转换，浏览器本地运行。" />
     <meta name="twitter:image" content="https://sakimu.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sakimu 在线开发工具封面图" />
 
     <link rel="canonical" href="https://sakimu.com/tools/" />
     <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+    <script src="/tools/tools.js" defer></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://sakimu.com/tools/#breadcrumb",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://sakimu.com/" },
+              { "@type": "ListItem", "position": 2, "name": "在线工具", "item": "https://sakimu.com/tools/" }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://sakimu.com/tools/#webpage",
+            "url": "https://sakimu.com/tools/",
+            "name": "在线开发工具 - JSON 格式化、Base64 编码、正则测试 | Sakimu",
+            "description": "免费在线开发工具集，全部在浏览器本地运行。",
+            "isPartOf": { "@id": "https://sakimu.com/#website" },
+            "breadcrumb": { "@id": "https://sakimu.com/tools/#breadcrumb" },
+            "inLanguage": "zh-CN"
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://sakimu.com/tools/#toollist",
+            "name": "在线开发工具列表",
+            "numberOfItems": 4,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "JSON 格式化与校验",
+                  "url": "https://sakimu.com/tools/#json",
+                  "applicationCategory": "DeveloperApplication",
+                  "operatingSystem": "Any",
+                  "description": "把压缩的 JSON 展开为带缩进的可读格式，或压缩回单行，同时校验语法。",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Base64 与 URL 编码转换",
+                  "url": "https://sakimu.com/tools/#codec",
+                  "applicationCategory": "DeveloperApplication",
+                  "operatingSystem": "Any",
+                  "description": "支持中文的 Base64 编码解码，以及 URL 百分号编码解码。",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "正则表达式测试",
+                  "url": "https://sakimu.com/tools/#regex",
+                  "applicationCategory": "DeveloperApplication",
+                  "operatingSystem": "Any",
+                  "description": "输入正则与测试文本，列出全部匹配位置、匹配内容与捕获分组。",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Unix 时间戳转换",
+                  "url": "https://sakimu.com/tools/#timestamp",
+                  "applicationCategory": "DeveloperApplication",
+                  "operatingSystem": "Any",
+                  "description": "秒级与毫秒级时间戳和本地时间、ISO 8601、UTC 时间互转。",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body data-page="tools">
     <div class="page-shell">
       <div class="site-header-bar">
         <header class="site-header container">
-          <a class="brand" href="/">Sakimu</a>
+          <a class="brand" href="/">
+            <img class="brand__mark" src="/icon-192.png" alt="" width="192" height="192" decoding="async" />
+            <span>Sakimu</span>
+          </a>
           <nav class="site-nav" aria-label="站点导航">
             <a href="/">首页</a>
-            <a href="https://blog.sakimu.com" target="_blank" rel="noreferrer noopener">博客</a>
+            <a href="https://blog.sakimu.com" target="_blank" rel="noopener">博客</a>
             <a href="/tools/" class="is-active" aria-current="page">工具</a>
             <a href="/donate/">投喂</a>
           </nav>
@@ -52,51 +146,168 @@
       <main class="container page-main">
         <section class="page-banner panel">
           <span class="eyebrow">工具</span>
-          <h1>工具页</h1>
-          <p>
-            常用工具、实验页面，或者平时会打开的一些在线服务。
+          <h1>在线开发工具</h1>
+          <p class="lead">
+            几个平时自己会反复用到的小工具。全部在你的浏览器里本地运行，输入的内容不会上传到任何服务器。
           </p>
         </section>
 
-        <section class="tools-grid-section">
-          <div class="card-grid">
-            <article class="panel card card--disabled">
-              <div class="card-top">
-                <span class="badge">待接入</span>
-                <h3>JSON 格式化</h3>
-              </div>
-              <p>示例工具位。你可以替换成自己的在线工具地址。</p>
-              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
-            </article>
+        <nav class="tools-jump" aria-label="工具快速跳转">
+          <a href="#json">JSON 格式化</a>
+          <a href="#codec">编码转换</a>
+          <a href="#regex">正则测试</a>
+          <a href="#timestamp">时间戳转换</a>
+        </nav>
 
-            <article class="panel card card--disabled">
-              <div class="card-top">
-                <span class="badge">待接入</span>
-                <h3>正则测试</h3>
-              </div>
-              <p>适合放常用开发工具、在线测试页面或实验功能。</p>
-              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
-            </article>
+        <noscript>
+          <p class="tool-noscript">
+            这些工具需要浏览器执行 JavaScript 才能运行。脚本只在本地处理你的输入，不会发送任何数据。
+          </p>
+        </noscript>
 
-            <article class="panel card card--disabled">
-              <div class="card-top">
-                <span class="badge">待接入</span>
-                <h3>编码转换</h3>
+        <div class="tool-list">
+          <section class="panel tool" id="json" aria-labelledby="json-title">
+            <div class="tool__head">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H8a2 2 0 0 0-2 2v3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h1" /><path d="M15 4h1a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0-2 2v3a2 2 0 0 1-2 2h-1" /></svg>
+              </span>
+              <div>
+                <h2 id="json-title">JSON 格式化与校验</h2>
+                <p>把压缩成一行的 JSON 展开成带缩进的可读格式，或者反过来压缩回一行。语法有问题时会直接告诉你错在哪里。</p>
               </div>
-              <p>可以替换为 Base64、URL Encode 或文本处理工具。</p>
-              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
-            </article>
+            </div>
+            <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="json-input">输入 JSON</label>
+                  <textarea class="textarea" id="json-input" spellcheck="false" placeholder='{"name":"sakimu","tags":["blog","tools"]}'></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="json-output">输出结果</label>
+                  <textarea class="textarea" id="json-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="json-format">格式化</button>
+                <button type="button" class="button button--ghost button--sm" id="json-minify">压缩为单行</button>
+                <button type="button" class="button button--ghost button--sm" id="json-copy">复制结果</button>
+                <button type="button" class="button button--ghost button--sm" id="json-clear">清空</button>
+              </div>
+              <p class="tool__status" id="json-status" role="status" aria-live="polite"></p>
+              <p class="tool__hint">缩进固定为 2 个空格。格式化会顺带完成一次语法校验，解析失败时会给出 JavaScript 引擎返回的具体错误位置。</p>
+            </div>
+          </section>
 
-            <article class="panel card card--disabled">
-              <div class="card-top">
-                <span class="badge">可扩展</span>
-                <h3>站点状态</h3>
+          <section class="panel tool" id="codec" aria-labelledby="codec-title">
+            <div class="tool__head">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13" /><path d="m14 5 3 3-3 3" /><path d="M20 16H7" /><path d="m10 13-3 3 3 3" /></svg>
+              </span>
+              <div>
+                <h2 id="codec-title">Base64 与 URL 编码转换</h2>
+                <p>Base64 编码解码支持中文（内部先转成 UTF-8 字节再编码），URL 编码使用 encodeURIComponent 规则。</p>
               </div>
-              <p>也可以放监控面板、服务状态页或公开仪表盘入口。</p>
-              <span class="card-cta button card-cta--disabled" aria-disabled="true">敬请期待</span>
-            </article>
-          </div>
-        </section>
+            </div>
+            <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="codec-input">输入文本</label>
+                  <textarea class="textarea" id="codec-input" spellcheck="false" placeholder="要编码或解码的内容"></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="codec-output">输出结果</label>
+                  <textarea class="textarea" id="codec-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="codec-b64-encode">Base64 编码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-b64-decode">Base64 解码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-url-encode">URL 编码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-url-decode">URL 解码</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-swap">结果放回输入</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-copy">复制结果</button>
+                <button type="button" class="button button--ghost button--sm" id="codec-clear">清空</button>
+              </div>
+              <p class="tool__status" id="codec-status" role="status" aria-live="polite"></p>
+              <p class="tool__hint">「结果放回输入」用来做连续转换，比如先 URL 解码再 Base64 解码。解码失败通常意味着输入里混进了非法字符或缺少补位的等号。</p>
+            </div>
+          </section>
+
+          <section class="panel tool" id="regex" aria-labelledby="regex-title">
+            <div class="tool__head">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" /><path d="M11 8.2v5.6" /><path d="m8.6 9.6 4.8 2.8" /><path d="m13.4 9.6-4.8 2.8" /></svg>
+              </span>
+              <div>
+                <h2 id="regex-title">正则表达式测试</h2>
+                <p>输入正则和测试文本，列出每一处匹配的位置、匹配内容，以及编号分组和具名分组的值。</p>
+              </div>
+            </div>
+            <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="regex-pattern">正则表达式</label>
+                  <input class="input" id="regex-pattern" type="text" spellcheck="false" autocomplete="off" placeholder="\d{4}-\d{2}-\d{2}" />
+                </div>
+                <div class="field">
+                  <label class="field__label" for="regex-flags">标志位 flags</label>
+                  <input class="input" id="regex-flags" type="text" spellcheck="false" autocomplete="off" value="g" placeholder="g / i / m / s / u" />
+                </div>
+              </div>
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="regex-text">测试文本</label>
+                  <textarea class="textarea" id="regex-text" spellcheck="false" placeholder="把要匹配的文本粘贴到这里"></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="regex-output">匹配结果</label>
+                  <textarea class="textarea" id="regex-output" spellcheck="false" readonly placeholder="匹配结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <div class="tool__row">
+                <button type="button" class="button button--primary button--sm" id="regex-run">开始匹配</button>
+                <button type="button" class="button button--ghost button--sm" id="regex-clear">清空</button>
+              </div>
+              <p class="tool__status" id="regex-status" role="status" aria-live="polite"></p>
+              <p class="tool__hint">不加 g 标志时只返回第一处匹配。为了避免病态正则把页面卡死，全局匹配最多列出 2000 条结果。</p>
+            </div>
+          </section>
+
+          <section class="panel tool" id="timestamp" aria-labelledby="timestamp-title">
+            <div class="tool__head">
+              <span class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" /><path d="M12 7v5.2l3.4 2" /></svg>
+              </span>
+              <div>
+                <h2 id="timestamp-title">Unix 时间戳转换</h2>
+                <p>时间戳转成可读时间，或者把某个日期时间转回时间戳。秒级和毫秒级都支持，按位数自动判断。</p>
+              </div>
+            </div>
+            <div class="tool__body">
+              <div class="tool__row--split">
+                <div class="field">
+                  <label class="field__label" for="ts-input">时间戳转时间</label>
+                  <input class="input" id="ts-input" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" placeholder="1756598400 或 1756598400000" />
+                  <div class="tool__row">
+                    <button type="button" class="button button--primary button--sm" id="ts-to-date">转换</button>
+                    <button type="button" class="button button--ghost button--sm" id="ts-now">填入当前时间</button>
+                  </div>
+                  <textarea class="textarea" id="ts-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="ts-date">时间转时间戳</label>
+                  <input class="input" id="ts-date" type="datetime-local" step="1" />
+                  <div class="tool__row">
+                    <button type="button" class="button button--primary button--sm" id="ts-to-stamp">转换</button>
+                  </div>
+                  <textarea class="textarea" id="ts-date-output" spellcheck="false" readonly placeholder="结果会显示在这里"></textarea>
+                </div>
+              </div>
+              <p class="tool__status" id="ts-status" role="status" aria-live="polite"></p>
+              <p class="tool__hint">10 位及以内按秒级解析，超过则按毫秒级解析。「本地时间」使用你当前设备的时区，ISO 8601 与 UTC 结果则始终是零时区。</p>
+            </div>
+          </section>
+        </div>
       </main>
 
       <footer class="site-footer container">
@@ -111,11 +322,5 @@
         </p>
       </footer>
     </div>
-
-    <script>
-      document.querySelectorAll('[data-year]').forEach((n) => {
-        n.textContent = String(new Date().getFullYear());
-      });
-    </script>
   </body>
 </html>
