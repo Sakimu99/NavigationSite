@@ -14,15 +14,20 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
 
-# 样式与脚本没有内容哈希，改动后需要及时生效，所以只缓存一天
+# 样式与脚本没有内容哈希，文件名永远不变。
+# 一旦被边缘缓存住，就会出现「新 HTML 配旧 CSS」——
+# HTML 是 max-age=0 每次都新，CSS 却能停留一整天，页面直接错版。
+# （2026-08-31 真实事故：工具子页上线后套用了改版前的旧样式。）
+# 注意 Pages 部署只清 pages.dev 的缓存，自定义域名走的是 zone 缓存，不会自动清。
+# 所以这里改成每次回源校验：命中 ETag 时只是一个 304，代价可以忽略。
 /*.css
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /*.js
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /manifest.webmanifest
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 # 图片与图标改动时会连带换文件名，可以放心长缓存
 /*.webp
