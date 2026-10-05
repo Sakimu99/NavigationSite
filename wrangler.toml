@@ -1,0 +1,5 @@
+# Cloudflare Pages 项目配置（Git 连动部署时以此文件为准）
+# 只把 public/ 发布出去：README、package.json、scripts/ 等源文件不会出现在线上。
+name = "navigationsite"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-01"

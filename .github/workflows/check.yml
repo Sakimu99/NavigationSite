@@ -1,0 +1,16 @@
+# 每次推送都跑一致性检查。只做检查，不参与部署（部署由 Cloudflare Pages 的 Git 连动负责）。
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check

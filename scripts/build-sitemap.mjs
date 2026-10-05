@@ -2,11 +2,10 @@
 // lastmod 取该文件最后一次提交的日期，避免手写日期随时间腐化。
 // 用法：npm run sitemap
 import { execFileSync } from 'node:child_process';
-import { readdirSync, writeFileSync, statSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { writeFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+import { PUBLIC as ROOT, SITEMAP_EXCLUDE, findHtml, toRoute } from './lib.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://sakimu.com';
 
 // 每条路由的抓取提示。没列到的页面按默认值处理。
@@ -18,33 +17,10 @@ const RULES = [
 ];
 const DEFAULT_RULE = { changefreq: 'monthly', priority: '0.5' };
 
-// 不该进 sitemap 的页面
-const EXCLUDE = new Set(['/404.html']);
-
-function findPages(dir) {
-  const found = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'scripts') {
-      continue;
-    }
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      found.push(...findPages(full));
-    } else if (entry.name.endsWith('.html')) {
-      found.push(full);
-    }
-  }
-  return found;
-}
-
-function toRoute(file) {
-  const rel = '/' + relative(ROOT, file).split('\\').join('/');
-  return rel.endsWith('/index.html') ? rel.slice(0, -'index.html'.length) : rel;
-}
-
 function lastModified(file) {
   try {
-    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', file], {
+    // --follow 追过重命名，--diff-filter=AM 跳过纯搬家的提交，lastmod 才反映真实的内容改动
+    const out = execFileSync('git', ['log', '-1', '--follow', '--diff-filter=AM', '--format=%cs', '--', file], {
       cwd: ROOT,
       encoding: 'utf8',
     }).trim();
@@ -56,9 +32,9 @@ function lastModified(file) {
   return statSync(file).mtime.toISOString().slice(0, 10);
 }
 
-const entries = findPages(ROOT)
+const entries = findHtml()
   .map((file) => ({ route: toRoute(file), file }))
-  .filter(({ route }) => !EXCLUDE.has(route))
+  .filter(({ route }) => !SITEMAP_EXCLUDE.has(route))
   .map(({ route, file }) => {
     const rule = RULES.find((r) => r.match.test(route)) ?? DEFAULT_RULE;
     return { route, lastmod: lastModified(file), ...rule };

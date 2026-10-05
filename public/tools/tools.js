@@ -2,6 +2,73 @@
 (function () {
   'use strict';
 
+  /* ---------- 正则匹配核心（主线程与 Worker 共用） ---------- */
+
+  // 病态正则可能让浏览器卡死，这里给全局匹配加一个迭代上限。
+  var MAX_MATCHES = 2000;
+
+  function formatMatch(match, index) {
+    var line = '#' + index + '  位置 ' + match.index + '  ' + JSON.stringify(match[0]);
+    for (var i = 1; i < match.length; i += 1) {
+      line += '\n     分组 ' + i + '：' + (match[i] === undefined ? '(未匹配)' : JSON.stringify(match[i]));
+    }
+    if (match.groups) {
+      Object.keys(match.groups).forEach(function (key) {
+        line += '\n     具名分组 ' + key + '：' +
+          (match.groups[key] === undefined ? '(未匹配)' : JSON.stringify(match.groups[key]));
+      });
+    }
+    return line;
+  }
+
+  // job: { source, flags, subject } → { error } 或 { lines, count, global }
+  function matchRegex(job) {
+    var re;
+    try {
+      re = new RegExp(job.source, job.flags);
+    } catch (err) {
+      return { error: err.message };
+    }
+
+    var lines = [];
+    var count = 0;
+
+    if (re.global) {
+      var match;
+      re.lastIndex = 0;
+      while ((match = re.exec(job.subject)) !== null) {
+        lines.push(formatMatch(match, count + 1));
+        count += 1;
+        // 零宽匹配会让 lastIndex 原地不动，必须手动推进。
+        if (match.index === re.lastIndex) re.lastIndex += 1;
+        if (count >= MAX_MATCHES) {
+          lines.push('… 已达到 ' + MAX_MATCHES + ' 条上限，停止匹配。');
+          break;
+        }
+      }
+    } else {
+      var single = re.exec(job.subject);
+      if (single) {
+        lines.push(formatMatch(single, 1));
+        count = 1;
+      }
+    }
+
+    return { lines: lines, count: count, global: re.global };
+  }
+
+  // 本文件同时充当正则 Worker：灾难性回溯会让单次 exec 卡住线程，
+  // 迭代上限拦不住，只能放到 Worker 里跑，超时就整个 terminate 掉。
+  // 复用同一个文件，Worker 的 URL 自然带上和页面一致的版本号，也不用为 CSP 放开 blob:。
+  if (typeof document === 'undefined') {
+    self.onmessage = function (event) {
+      self.postMessage(matchRegex(event.data));
+    };
+    return;
+  }
+
+  var SCRIPT_URL = document.currentScript ? document.currentScript.src : '';
+
   var $ = function (id) {
     return document.getElementById(id);
   };
@@ -165,77 +232,78 @@
     var status = $('regex-status');
     if (!pattern || !text || !output) return;
 
-    // 病态正则可能让浏览器卡死，这里给全局匹配加一个迭代上限。
-    var MAX_MATCHES = 2000;
+    var TIMEOUT_MS = 2000;
+    var worker = null;
+    var timer = 0;
 
-    function run() {
-      var source = pattern.value;
-      if (!source) {
+    function stop() {
+      if (worker) {
+        worker.terminate();
+        worker = null;
+      }
+      clearTimeout(timer);
+    }
+
+    function show(result) {
+      if (result.error) {
         output.value = '';
-        setStatus(status, '请先输入正则表达式。', 'error');
+        setStatus(status, '正则无效：' + result.error, 'error');
         return;
       }
-
-      var re;
-      try {
-        re = new RegExp(source, flags.value);
-      } catch (err) {
-        output.value = '';
-        setStatus(status, '正则无效：' + err.message, 'error');
-        return;
-      }
-
-      var subject = text.value;
-      var lines = [];
-      var count = 0;
-
-      if (re.global) {
-        var match;
-        re.lastIndex = 0;
-        while ((match = re.exec(subject)) !== null) {
-          lines.push(formatMatch(match, count + 1));
-          count += 1;
-          // 零宽匹配会让 lastIndex 原地不动，必须手动推进。
-          if (match.index === re.lastIndex) re.lastIndex += 1;
-          if (count >= MAX_MATCHES) {
-            lines.push('… 已达到 ' + MAX_MATCHES + ' 条上限，停止匹配。');
-            break;
-          }
-        }
-      } else {
-        var single = re.exec(subject);
-        if (single) {
-          lines.push(formatMatch(single, 1));
-          count = 1;
-        }
-      }
-
-      if (!count) {
+      if (!result.count) {
         output.value = '';
         setStatus(status, '没有匹配到任何内容。');
         return;
       }
-
-      output.value = lines.join('\n');
-      setStatus(status, '共匹配到 ' + count + ' 处' + (re.global ? '' : '（未加 g 标志，只返回第一处）') + '。', 'ok');
+      output.value = result.lines.join('\n');
+      setStatus(status, '共匹配到 ' + result.count + ' 处' + (result.global ? '' : '（未加 g 标志，只返回第一处）') + '。', 'ok');
     }
 
-    function formatMatch(match, index) {
-      var line = '#' + index + '  位置 ' + match.index + '  ' + JSON.stringify(match[0]);
-      for (var i = 1; i < match.length; i += 1) {
-        line += '\n     分组 ' + i + '：' + (match[i] === undefined ? '(未匹配)' : JSON.stringify(match[i]));
+    function run() {
+      if (!pattern.value) {
+        output.value = '';
+        setStatus(status, '请先输入正则表达式。', 'error');
+        return;
       }
-      if (match.groups) {
-        Object.keys(match.groups).forEach(function (key) {
-          line += '\n     具名分组 ' + key + '：' +
-            (match.groups[key] === undefined ? '(未匹配)' : JSON.stringify(match.groups[key]));
-        });
+      var job = { source: pattern.value, flags: flags.value, subject: text.value };
+      stop();
+
+      try {
+        worker = SCRIPT_URL && window.Worker ? new Worker(SCRIPT_URL) : null;
+      } catch (err) {
+        worker = null;
       }
-      return line;
+      // 不支持 Worker 的环境退回主线程同步执行
+      if (!worker) {
+        show(matchRegex(job));
+        return;
+      }
+
+      setStatus(status, '匹配中…');
+      worker.onmessage = function (event) {
+        stop();
+        show(event.data);
+      };
+      worker.onerror = function () {
+        stop();
+        output.value = '';
+        setStatus(status, '匹配过程出错，请检查正则或缩短测试文本。', 'error');
+      };
+      worker.postMessage(job);
+      timer = setTimeout(function () {
+        stop();
+        output.value = '';
+        setStatus(
+          status,
+          '匹配超过 ' + TIMEOUT_MS / 1000 + ' 秒仍未结束，已中止。正则很可能存在灾难性回溯，比如 (a+)+ 这类嵌套量词。',
+          'error'
+        );
+      }, TIMEOUT_MS);
     }
 
     bind('regex-run', run);
     bind('regex-clear', function () {
+      stop();
       pattern.value = '';
       text.value = '';
       output.value = '';

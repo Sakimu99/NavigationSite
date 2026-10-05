@@ -4,8 +4,13 @@
   "private": true,
   "description": "A deployable static navigation site for sakimu.com",
   "scripts": {
-    "dev": "npx wrangler pages dev .",
-    "start": "npx wrangler pages dev .",
-    "sitemap": "node scripts/build-sitemap.mjs"
+    "dev": "npx wrangler@4.147.0 pages dev public",
+    "start": "npm run dev",
+    "sitemap": "node scripts/build-sitemap.mjs",
+    "stamp": "node scripts/stamp-assets.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

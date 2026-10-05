@@ -15,13 +15,17 @@
 工具页的**交互逻辑**由 `tools/tools.js` 提供，但工具的说明文字、FAQ 等所有可见内容
 依然写死在 HTML 里，JS 只负责按钮响应。
 
-本地开发命令：
+常用命令（全部零依赖，只需要 Node 18+）：
 
 ```bash
-npm run dev        # 实际执行 npx wrangler pages dev .
+npm run dev        # 本地预览 public/（wrangler pages dev，版本已固定）
+npm run stamp      # 改完 CSS / JS 后给 HTML 里的引用刷新版本号
+npm run sitemap    # 新增页面后重新生成 sitemap.xml
+npm run check      # 一致性检查，CI 每次推送都会跑
 ```
 
-项目面向 **Cloudflare Pages** 一类的静态托管环境。
+项目部署在 **Cloudflare Pages**（Git 连动）。`wrangler.toml` 里的 `pages_build_output_dir = "public"`
+决定了**只有 `public/` 会被发布**，README、`package.json`、`scripts/` 都不会出现在线上。
 
 ---
 
@@ -29,6 +33,15 @@ npm run dev        # 实际执行 npx wrangler pages dev .
 
 ```text
 NavigationSite/
+├─ wrangler.toml              # Pages 配置：只发布 public/
+├─ package.json               # 本地脚本（dev / stamp / sitemap / check）
+├─ scripts/
+│  ├─ lib.mjs                 # 脚本共用：扫描页面、路径转路由
+│  ├─ build-sitemap.mjs       # 扫描页面生成 sitemap，lastmod 取自 git 提交日期
+│  ├─ stamp-assets.mjs        # 给 CSS / JS 引用加内容哈希版本号
+│  └─ check.mjs               # 一致性检查（页头页脚、JSON-LD、CSP、版本号等）
+├─ .github/workflows/check.yml# 推送时跑 npm run check
+└─ public/                    # ↓ 以下全部是线上站点根目录
 ├─ index.html                 # 首页（含首页入口卡片）
 ├─ 404.html                   # 404 页面
 ├─ styles.css                 # 全站公共样式（含亮色 / 暗色主题变量）
@@ -42,12 +55,9 @@ NavigationSite/
 ├─ icon-mark-64.webp          # 导航栏品牌标记（显示 26px）
 ├─ avatar-256.webp            # 首页 hero 头像（显示 116px）
 ├─ og-image.jpg               # 社交分享缩略图 1200×630
-├─ package.json               # 本地开发脚本
 ├─ _headers                   # 缓存策略 + 安全响应头
 ├─ robots.txt                 # 搜索引擎抓取规则
 ├─ sitemap.xml                # 站点地图（由脚本生成，不要手改）
-├─ scripts/
-│  └─ build-sitemap.mjs       # 扫描页面生成 sitemap，lastmod 取自 git 提交日期
 ├─ tools/
 │  ├─ index.html              # 工具索引页（只列卡片，不放工具本体）
 │  ├─ tools.js                # 4 个工具的交互逻辑（全部本地运行）
@@ -61,12 +71,13 @@ NavigationSite/
 │  ├─ zhifubao-donate-560.webp# 收款码海报 560w（WebP，主用）
 │  ├─ zhifubao-donate.jpg     # 收款码海报 820w（JPEG 降级）
 │  └─ zhifubao-donate-560.jpg # 收款码海报 560w（JPEG 降级）
-└─ .gitignore
 ```
 
 ---
 
 ## 3. 各核心文件作用说明
+
+> 本节和第 4 节里的站点文件路径（`index.html`、`styles.css`、`tools/…`、`_headers` 等）都相对于 `public/`。
 
 ### 3.1 页面 HTML（共 8 个）
 每个页面文件各自负责：
@@ -100,6 +111,10 @@ NavigationSite/
 - `tools/tools.js`：4 个工具的全部逻辑。每个工具用 `if (!input || !output) return;` 做存在性判断，
   所以同一个文件可以安全地被 4 个子页共用，各页只会激活自己那一个工具
 
+> 正则测试跑在 Web Worker 里，2 秒没结束就 `terminate()`，防止灾难性回溯卡死页面。
+> Worker 用的就是 `tools.js` 自己（文件开头判断 `typeof document === 'undefined'` 进入 Worker 模式），
+> 这样 Worker 的 URL 自带页面上的版本号，也不需要为 CSP 放开 `blob:`。
+
 > 工具输出一律走 `.value` 和 `.textContent`，**不要用 `innerHTML`**，避免把用户输入变成 XSS 面。
 
 ### 3.2 `styles.css`
@@ -116,10 +131,17 @@ NavigationSite/
 ### 3.3 `_headers`
 Cloudflare Pages 响应头配置，分两部分：
 
-- **缓存策略**：HTML 每次校验（改完立即生效）；CSS / JS 缓存 1 天；图片 / 图标缓存 1 年
+- **缓存策略**：HTML / CSS / JS / manifest 每次回源校验（`max-age=0, must-revalidate`）；图片 / 图标缓存 1 年
 - **安全响应头**：CSP、nosniff、X-Frame-Options、Referrer-Policy、Permissions-Policy
 
-> CSS 和 JS 都没有内容哈希，所以只缓存 1 天，避免改完后用户长期看到旧版。
+> HTML 里引用 CSS / JS 时带 `?v=<内容哈希>`（`npm run stamp` 生成），内容一变 URL 就变，
+> 所以即使浏览器还缓存着旧文件，新 HTML 也不会套到旧样式。
+> 曾经缓存 1 天又没有版本号，结果出现「新 HTML 套旧 CSS」的错版事故。
+> 忘了跑 stamp 的话 `npm run check` 会报错；即使漏掉，行为也只是退回到没有版本号时的状态。
+
+> **线上实际值不一定等于 `_headers`**：sakimu.com 的 Cloudflare zone 设置了「浏览器缓存 TTL」，
+> 会把 CSS / JS 的 `max-age` 覆写成 14400（4 小时）。另外 Pages 部署只清 pages.dev 的缓存，
+> 不清自定义域名的 zone 缓存。推了样式线上没变，先 `curl -sI https://sakimu.com/styles.css` 查缓存。
 
 > **CF Pages 的坑**：同名响应头是「拼接」而不是「覆盖」。
 > 所以 `/*` 段里只放安全头，`Cache-Control` 一律按文件类型单独声明，互不重叠。
@@ -137,7 +159,7 @@ PWA 清单，让站点可以「添加到主屏幕」。改站点名 / 主题色�
 npm run sitemap
 ```
 
-脚本会扫描仓库里所有 `*.html`（排除 `404.html`），把路径映射成 URL，
+脚本会扫描 `public/` 里所有 `*.html`（排除 `404.html`），把路径映射成 URL，
 `lastmod` 取该文件最后一次 git 提交的日期，尚未提交的新文件退回文件系统修改时间。
 新增页面后跑一次即可，不用记日期。抓取频率和优先级在脚本顶部的 `RULES` 里配置。
 
@@ -145,8 +167,16 @@ npm run sitemap
 
 ## 4. 常见维护场景
 
+### 场景 0：任何改动之后
+```bash
+npm run stamp && npm run check
+```
+`check` 会检查：页头页脚在 8 个页面里是否一致、`WebPage.name` 是否等于 `<title>`、
+有没有内联脚本 / 样式、版本号是否最新、sitemap 是否覆盖所有页面、工具子页是否互相链接、
+`styles.css` 有没有在变量区之外写死颜色。改页头页脚时，8 个页面要一起改，漏一个它就会报出来。
+
 ### 场景 1：修改首页文案
-直接改 `index.html` 里对应的 `<h1>` / `<p class="lead">`。
+直接改 `public/index.html` 里对应的 `<h1>` / `<p class="lead">`。
 
 ### 场景 2：修改首页入口卡片
 改 `index.html` 中 `.card-grid` 里的 `<article class="panel card">` 块。
@@ -201,7 +231,7 @@ npm run sitemap
    - `<h1>`、`.tool-page__lead`、工具本体、「怎么用」、「常见问题」
    - 页面底部 `.tool-siblings` 的兄弟工具链接，**其他 4 个子页也要各加一条指向新页的链接**
 3. **上索引**：在 `tools/index.html` 加一张卡片
-4. **更新站点地图**：`npm run sitemap`
+4. **更新站点地图**：`npm run sitemap`，再跑 `npm run stamp && npm run check`
 
 > 每个子页都要有真实的「怎么用」和「常见问题」内容。
 > 这不是为了凑字数——工具页只有一个输入框的话，既帮不到访客，
@@ -268,5 +298,6 @@ PY
 - **改缓存 / 安全头** → 改 `_headers`
 - **换图片** → 先按场景 6 压缩，再替换
 - **加页面** → 建 HTML、上索引卡片、跑 `npm run sitemap`
+- **提交前** → `npm run stamp && npm run check`
 
 保持「纯静态 HTML + 单一样式表 + 零外部依赖」这个结构，站点就会一直很快喵～

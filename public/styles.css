@@ -25,6 +25,7 @@
   --accent-hover: #3a3532;
   --accent-soft: #f1f0ee;
   --badge-bg: #fafaf9;
+  --success: #2f7a4f;
 
   --donate-card-from: #ffffff;
   --donate-card-to: #fcfbf9;
@@ -78,6 +79,7 @@
     --accent-hover: #e2ded9;
     --accent-soft: #2e2925;
     --badge-bg: #2a2522;
+    --success: #74c295;
 
     --donate-card-from: #23201c;
     --donate-card-to: #1e1a17;
@@ -577,41 +579,6 @@ p {
   background: var(--brand-soft);
 }
 
-.tool-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-top: 18px;
-}
-
-.tool {
-  padding: 24px 26px;
-  scroll-margin-top: 84px;
-}
-
-.tool__head {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.tool__head .card-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.tool__head h2 {
-  margin-bottom: 4px;
-  font-size: 1.15rem;
-  letter-spacing: -0.01em;
-}
-
-.tool__head p {
-  margin-bottom: 0;
-  font-size: var(--fs-sm);
-}
-
 .tool__body {
   display: flex;
   flex-direction: column;
@@ -696,24 +663,11 @@ p {
 }
 
 .tool__status[data-state='ok'] {
-  color: #2f7a4f;
+  color: var(--success);
 }
 
 .tool__status[data-state='error'] {
   color: var(--brand);
-}
-
-@media (prefers-color-scheme: dark) {
-  .tool__status[data-state='ok'] {
-    color: #74c295;
-  }
-}
-
-.tool__hint {
-  margin: 0;
-  color: var(--subtle);
-  font-size: var(--fs-xs);
-  line-height: 1.65;
 }
 
 .tool-noscript {
@@ -1072,13 +1026,8 @@ p {
   .page-banner,
   .not-found,
   .card,
-  .tool,
   .donate-card {
     padding: 20px;
-  }
-
-  .tool__head {
-    gap: 12px;
   }
 
   .hero-actions {
